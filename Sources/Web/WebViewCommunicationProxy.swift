@@ -35,7 +35,7 @@ public class DefaultWebViewCommunicationProxy: NSObject, ObservableObject, WKScr
     public weak var webView: WKWebView?
     public var onWebViewMessage: (any WebViewMessage) -> Void = { _ in }
     public var onUnknownMessage: (String, Data) -> Void = { _, _ in }
-    
+
     private var loadedContent: CrossmintWebViewContent?
     private var isPageLoaded = false
     private let messageHandler = WebViewMessageHandler()
@@ -50,7 +50,7 @@ public class DefaultWebViewCommunicationProxy: NSObject, ObservableObject, WKScr
 
     public func loadURL(_ url: URL) async throws {
         guard let webView = webView else {
-            
+
             throw WebViewError.webViewNotAvailable
         }
 

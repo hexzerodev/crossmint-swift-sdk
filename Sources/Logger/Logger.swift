@@ -3,7 +3,7 @@ import Utils
 
 public struct Logger: Sendable {
     public nonisolated(unsafe) static var level: OSLogType = .fault
-    
+
     private let osLogger: OSLog
     private let subsystem: String
 
@@ -16,7 +16,7 @@ public struct Logger: Sendable {
         if isRunningInPlayground() {
             print("🔍 [\(subsystem)] \(message)")
         }
-        
+
         guard Logger.level == .debug else { return }
         os_log(.debug, log: osLogger, "%{public}@", message)
     }
@@ -25,7 +25,7 @@ public struct Logger: Sendable {
         if isRunningInPlayground() {
             print("❌ [\(subsystem)] \(message)")
         }
-        
+
         guard Logger.level != .fault else { return }
         os_log(.error, log: osLogger, "%{public}@", message)
     }
