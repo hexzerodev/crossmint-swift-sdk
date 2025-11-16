@@ -21,7 +21,8 @@ final public class CrossmintSDK: ObservableObject {
         return shared
     }
 
-    public static func shared(apiKey: String) -> CrossmintSDK {
+    public static func shared(apiKey: String, logLevel: OSLogType = .default) -> CrossmintSDK {
+        Logger.level = logLevel
         let newInstance = CrossmintSDK(apiKey: apiKey)
         _shared = newInstance
         return newInstance
