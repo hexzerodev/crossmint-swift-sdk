@@ -7,6 +7,13 @@ public protocol AuthManager: Sendable {
 
     var authenticationStatus: AuthenticationStatus { get async throws(AuthError) }
 
+    // TODO: This method should NOT be invoked by the developer. Review this.
+    func logout() async throws(AuthManagerError) -> OTPAuthenticationStatus
+
+    func reset() async -> OTPAuthenticationStatus
+}
+
+public protocol OTPAuthManager: AuthManager {
     func otpAuthentication(
         email: String,
         code: String?,
@@ -18,11 +25,6 @@ public protocol AuthManager: Sendable {
         oneTimeSecret: String
     ) async throws(AuthManagerError) -> OTPAuthenticationStatus
     #endif
-
-    // TODO: This method should NOT be invoked by the developer. Review this.
-    func logout() async throws(AuthManagerError) -> OTPAuthenticationStatus
-
-    func reset() async -> OTPAuthenticationStatus
 }
 
 public enum AuthManagerError: Swift.Error {
