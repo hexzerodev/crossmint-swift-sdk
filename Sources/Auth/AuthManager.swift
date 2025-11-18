@@ -7,6 +7,8 @@ public protocol AuthManager: Sendable {
 
     var authenticationStatus: AuthenticationStatus { get async throws(AuthError) }
 
+    func setJWT(_ jwt: String) async
+
     // TODO: This method should NOT be invoked by the developer. Review this.
     func logout() async throws(AuthManagerError) -> OTPAuthenticationStatus
 
