@@ -9,13 +9,6 @@ public protocol AuthManager: Sendable {
 
     func setJWT(_ jwt: String) async
 
-    // TODO: This method should NOT be invoked by the developer. Review this.
-    func logout() async throws(AuthManagerError) -> OTPAuthenticationStatus
-
-    func reset() async -> OTPAuthenticationStatus
-}
-
-public protocol OTPAuthManager: AuthManager {
     func otpAuthentication(
         email: String,
         code: String?,
@@ -27,6 +20,11 @@ public protocol OTPAuthManager: AuthManager {
         oneTimeSecret: String
     ) async throws(AuthManagerError) -> OTPAuthenticationStatus
     #endif
+
+    // TODO: This method should NOT be invoked by the developer. Review this.
+    func logout() async throws(AuthManagerError) -> OTPAuthenticationStatus
+
+    func reset() async -> OTPAuthenticationStatus
 }
 
 public enum AuthManagerError: Swift.Error {

@@ -1,7 +1,7 @@
 import Logger
 import SecureStorage
 
-public actor DefaultAuthManager: OTPAuthManager {
+public actor DefaultAuthManager: AuthManager {
     private let authService: AuthService
     private let secureStorage: SecureStorage
     private var otpAuthenticationStatus: OTPAuthenticationStatus = .authenticationStatus(.nonAuthenticated)
