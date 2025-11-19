@@ -1,5 +1,6 @@
 import CrossmintService
 import Logger
+import Auth
 
 public actor CrossmintClient {
     public enum Error: Swift.Error {
@@ -15,7 +16,7 @@ public actor CrossmintClient {
         self.apiKey = apiKey
     }
 
-    public static func sdk(key: String) -> ClientSDK {
+    public static func sdk(key: String, authManager: AuthManager? = nil) -> ClientSDK {
         lock.lock()
         defer { lock.unlock() }
 
@@ -36,8 +37,14 @@ public actor CrossmintClient {
                 shared = instance
                 return instance
             }
-
-            let instance = CrossmintClientSDK(apiKey: apiKey)
+            
+            let instance: CrossmintClientSDK
+            if let authManager {
+                instance = CrossmintClientSDK(apiKey: apiKey, authManager: authManager)
+            } else {
+                instance = CrossmintClientSDK(apiKey: apiKey)
+            }
+            
             shared = instance
             return instance
         }

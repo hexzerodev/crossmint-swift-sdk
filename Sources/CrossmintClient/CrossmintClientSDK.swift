@@ -12,7 +12,7 @@ public final class CrossmintClientSDK: ClientSDK, Sendable {
     public let crossmintService: CrossmintService
     public let authManager: any Auth.AuthManager
 
-    init(apiKey: ApiKey) {
+    init(apiKey: ApiKey, authManager: AuthManager? = nil) {
         self.apiKey = apiKey
 
         if let bundleId = Bundle.main.bundleIdentifier {
@@ -24,11 +24,15 @@ public final class CrossmintClientSDK: ClientSDK, Sendable {
             secureWalletStorage = NoOpSecureWalletStorage()
             crossmintService = NoOpCrossmintService()
         }
-
-        self.authManager = DefaultAuthManager(
-            authService: DefaultAuthService(crossmintService: crossmintService),
-            secureStorage: secureStorage
-        )
+        
+        if let authManager {
+            self.authManager = authManager
+        } else {
+            self.authManager = DefaultAuthManager(
+                authService: DefaultAuthService(crossmintService: crossmintService),
+                secureStorage: secureStorage
+            )
+        }
     }
 
     public func crossmintWallets() -> CrossmintWallets {
