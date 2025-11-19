@@ -27,6 +27,24 @@ public protocol AuthManager: Sendable {
     func reset() async -> OTPAuthenticationStatus
 }
 
+extension AuthManager {
+    public func otpAuthentication(
+        email: String,
+        code: String?,
+        forceRefresh: Bool
+    ) async throws(AuthManagerError) -> OTPAuthenticationStatus {
+        throw .unknown("otpAuthentication has not been implemented")
+    }
+
+    #if DEBUG
+    public func oneTimeSecretAuthentication(
+        oneTimeSecret: String
+    ) async throws(AuthManagerError) -> OTPAuthenticationStatus {
+        throw .unknown("oneTimeSecretAuthentication has not been implemented")
+    }
+    #endif
+}
+
 public enum AuthManagerError: Swift.Error {
     case unknown(String)
     case serviceError(String)
