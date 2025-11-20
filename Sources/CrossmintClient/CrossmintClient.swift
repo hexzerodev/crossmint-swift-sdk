@@ -37,14 +37,14 @@ public actor CrossmintClient {
                 shared = instance
                 return instance
             }
-            
+
             let instance: CrossmintClientSDK
             if let authManager {
                 instance = CrossmintClientSDK(apiKey: apiKey, authManager: authManager)
             } else {
                 instance = CrossmintClientSDK(apiKey: apiKey)
             }
-            
+
             shared = instance
             return instance
         }

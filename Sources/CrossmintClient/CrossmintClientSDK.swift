@@ -24,7 +24,7 @@ public final class CrossmintClientSDK: ClientSDK, Sendable {
             secureWalletStorage = NoOpSecureWalletStorage()
             crossmintService = NoOpCrossmintService()
         }
-        
+
         if let authManager {
             self.authManager = authManager
         } else {
