@@ -2,7 +2,7 @@ import SwiftUI
 import CrossmintClient
 
 struct SignInView: View {
-    @EnvironmentObject var sdk: CrossmintSDK
+    private let sdk: CrossmintSDK = .shared
 
     @Binding var authenticationStatus: AuthenticationStatus?
 

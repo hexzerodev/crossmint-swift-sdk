@@ -1,11 +1,9 @@
 import SwiftUI
 import CrossmintClient
 
-struct OTPValidatorView: NonCustodialSignerCallbackView {
-    var nonCustodialSignerCallback: NonCustodialSignerCallback
-
-    @EnvironmentObject var sdk: CrossmintSDK
-
+struct OTPValidatorView: View {
+    private let sdk: CrossmintSDK = .shared
+    
     @State private var verificationCode: String = ""
     @State private var showAlert: Bool = false
     @State private var alertMessage: String = ""
@@ -63,14 +61,14 @@ struct OTPValidatorView: NonCustodialSignerCallbackView {
 
     private func verifyCode() {
         guard !verificationCode.isEmpty else { return }
-        nonCustodialSignerCallback.otpCode(verificationCode)
+        sdk.submit(otp: verificationCode)
     }
 
     private func dismiss() {
         withAnimation(AnimationConstants.easeOut()) {
             opacity = 0
         }
-        nonCustodialSignerCallback.otpCancelled()
+        sdk.cancelTransaction()
     }
 
     private func showAlert(with message: String) {
@@ -80,8 +78,5 @@ struct OTPValidatorView: NonCustodialSignerCallbackView {
 }
 
 #Preview {
-    OTPValidatorView(
-        nonCustodialSignerCallback: NonCustodialSignerCallback.noOp
-    )
-    .environmentObject(CrossmintSDK.shared)
+    OTPValidatorView()
 }

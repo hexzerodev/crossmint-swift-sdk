@@ -4,7 +4,7 @@ import Wallet
 
 // swiftlint:disable:next type_body_length
 struct DashboardView: View {
-    @EnvironmentObject var sdk: CrossmintSDK
+    private let sdk: CrossmintSDK = .shared
 
     @StateObject private var alertViewModel = AlertViewModel()
 

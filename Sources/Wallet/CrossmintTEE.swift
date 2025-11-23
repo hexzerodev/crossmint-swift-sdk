@@ -108,10 +108,6 @@ public final class CrossmintTEE: ObservableObject {
         webProxy.resetLoadedContent()
     }
 
-    public func getCallback() -> NonCustodialSignerCallback {
-        NonCustodialSignerCallback(otpCode: provideOTP(_:), otpCancelled: cancelOTP)
-    }
-
     public func load() async throws(Error) {
         do {
             try await webProxy.loadURL(url)
@@ -264,13 +260,13 @@ public final class CrossmintTEE: ObservableObject {
         }
     }
 
-    private func provideOTP(_ code: String) {
+    public func provideOTP(_ code: String) {
         otpContinuation?.resume(returning: code)
         otpContinuation = nil
         isOTPRequired = false
     }
 
-    private func cancelOTP() {
+    public func cancelOTP() {
         otpContinuation?.resume(throwing: CrossmintTEE.Error.userCancelled)
         otpContinuation = nil
         isOTPRequired = false

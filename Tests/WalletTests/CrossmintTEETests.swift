@@ -201,8 +201,7 @@ struct CrossmintTEETests {
         try await Task.sleep(nanoseconds: 100_000_000)
         #expect(fixture.tee.isOTPRequired == true)
 
-        let callback = fixture.tee.getCallback()
-        callback.otpCode("123456")
+        fixture.tee.provideOTP("123456")
 
         let signature = try await signTask.value
         #expect(signature == "0xsignature456")
@@ -298,8 +297,7 @@ struct CrossmintTEETests {
         try await Task.sleep(nanoseconds: 100_000_000)
         #expect(fixture.tee.isOTPRequired == true)
 
-        let callback = fixture.tee.getCallback()
-        callback.otpCancelled()
+        fixture.tee.cancelOTP()
 
         await #expect(throws: CrossmintTEE.Error.userCancelled) {
             _ = try await signTask.value
@@ -331,8 +329,7 @@ struct CrossmintTEETests {
         try await Task.sleep(nanoseconds: 100_000_000)
         #expect(fixture.tee.isOTPRequired == true)
 
-        let callback = fixture.tee.getCallback()
-        callback.otpCode("123456")
+        fixture.tee.provideOTP("123456")
 
         _ = try await signTask.value
 

@@ -35,6 +35,14 @@ final public class CrossmintSDK: ObservableObject {
     public let crossmintService: CrossmintService
 
     let crossmintTEE: CrossmintTEE
+    
+    @Published public var isOTPRequred: Bool = false
+    public func submit(otp: String) {
+        crossmintTEE.provideOTP(otp)
+    }
+    public func cancelTransaction() {
+        crossmintTEE.cancelOTP()
+    }
 
     public var isProductionEnvironment: Bool {
         crossmintService.isProductionEnvironment
@@ -68,6 +76,7 @@ final public class CrossmintSDK: ObservableObject {
             apiKey: apiKey ?? "",
             isProductionEnvironment: sdk.crossmintService.isProductionEnvironment
         )
+        self.crossmintTEE.$isOTPRequired.assign(to: &$isOTPRequred)
     }
 
     public func logout() async throws {

@@ -2,7 +2,7 @@ import SwiftUI
 import CrossmintClient
 
 struct DashboardView: View {
-    @EnvironmentObject var sdk: CrossmintSDK
+    private let sdk: CrossmintSDK = .shared
 
     @StateObject private var alertViewModel = AlertViewModel()
 
