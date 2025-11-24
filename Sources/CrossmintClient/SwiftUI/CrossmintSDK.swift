@@ -75,7 +75,9 @@ final public class CrossmintSDK: ObservableObject {
     }
 
     public func logout() async throws {
-        _ = try await authManager.logout()
+        if let defaultAuthManager = authManager as? DefaultAuthManager {
+            _ = try await defaultAuthManager.logout()
+        }
         crossmintTEE.resetState()
     }
 }
