@@ -3,46 +3,8 @@ import Logger
 
 public protocol AuthManager: Sendable {
     var jwt: String? { get async }
-    var email: String? { get async }
-
-    var authenticationStatus: AuthenticationStatus { get async throws(AuthError) }
 
     func setJWT(_ jwt: String) async
-
-    func otpAuthentication(
-        email: String,
-        code: String?,
-        forceRefresh: Bool
-    ) async throws(AuthManagerError) -> OTPAuthenticationStatus
-
-    #if DEBUG
-    func oneTimeSecretAuthentication(
-        oneTimeSecret: String
-    ) async throws(AuthManagerError) -> OTPAuthenticationStatus
-    #endif
-
-    // TODO: This method should NOT be invoked by the developer. Review this.
-    func logout() async throws(AuthManagerError) -> OTPAuthenticationStatus
-
-    func reset() async -> OTPAuthenticationStatus
-}
-
-extension AuthManager {
-    public func otpAuthentication(
-        email: String,
-        code: String?,
-        forceRefresh: Bool
-    ) async throws(AuthManagerError) -> OTPAuthenticationStatus {
-        throw .unknown("otpAuthentication has not been implemented")
-    }
-
-    #if DEBUG
-    public func oneTimeSecretAuthentication(
-        oneTimeSecret: String
-    ) async throws(AuthManagerError) -> OTPAuthenticationStatus {
-        throw .unknown("oneTimeSecretAuthentication has not been implemented")
-    }
-    #endif
 }
 
 public enum AuthManagerError: Swift.Error {
