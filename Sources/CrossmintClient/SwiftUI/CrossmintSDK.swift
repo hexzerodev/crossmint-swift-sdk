@@ -36,7 +36,7 @@ final public class CrossmintSDK: ObservableObject {
     public let crossmintService: CrossmintService
 
     let crossmintTEE: CrossmintTEE
-    
+
     public var isOTPRequred: Published<Bool>.Publisher {
         crossmintTEE.$isOTPRequired
     }

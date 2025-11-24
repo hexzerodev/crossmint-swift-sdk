@@ -3,7 +3,7 @@ import CrossmintClient
 
 struct OTPValidatorView: View {
     private let sdk: CrossmintSDK = .shared
-    
+
     @State private var verificationCode: String = ""
     @State private var showAlert: Bool = false
     @State private var alertMessage: String = ""
