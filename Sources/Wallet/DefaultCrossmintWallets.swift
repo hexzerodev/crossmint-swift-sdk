@@ -91,10 +91,6 @@ Review if the .crossmintEnvironmentObject modifier is used as expected.
         signer
     }
 
-    private func updateEffectiveSigner(_ signer: any Signer) async {
-        // No-op: email-based keypair storage has been removed
-    }
-
     private func initializeSigner(
         _ effectiveSigner: any Signer
     ) async throws(WalletError) {
@@ -140,7 +136,6 @@ Review if the .crossmintEnvironmentObject modifier is used as expected.
             )
         )
 
-        await updateEffectiveSigner(effectiveSigner)
         return walletApiModel
     }
 }
