@@ -28,7 +28,7 @@ struct CrossmintTEETests {
             email: String? = nil
         ) async {
             await authManager.setJWT(jwt ?? CrossmintTEETestHelpers.createTestJWT())
-            await authManager.setEmail(email ?? "test@example.com")
+            tee.email = email ?? "test@example.com"
         }
 
         func setupHandshake(verificationId: String = "test123") async throws {
