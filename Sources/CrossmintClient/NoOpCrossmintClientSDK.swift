@@ -78,6 +78,8 @@ struct NoOpAuthManager: AuthManager {
         throw invalidAuthManagerError
     }
 
+    func setJWT(_ jwt: String) async {}
+
     func logout() async throws(AuthManagerError) -> OTPAuthenticationStatus {
         throw invalidAuthManagerError
     }

@@ -22,9 +22,13 @@ final public class CrossmintSDK: ObservableObject {
         return shared
     }
 
-    public static func shared(apiKey: String, logLevel: OSLogType = .default) -> CrossmintSDK {
+    public static func shared(
+        apiKey: String,
+        authManager: AuthManager? = nil,
+        logLevel: OSLogType = .default
+    ) -> CrossmintSDK {
         Logger.level = logLevel
-        let newInstance = CrossmintSDK(apiKey: apiKey)
+        let newInstance = CrossmintSDK(apiKey: apiKey, authManager: authManager)
         _shared = newInstance
         return newInstance
     }
@@ -63,9 +67,9 @@ final public class CrossmintSDK: ObservableObject {
         self.init()
     }
 
-    private init(apiKey: String? = nil) {
+    private init(apiKey: String? = nil, authManager: AuthManager? = nil) {
         if let apiKey {
-            sdk = CrossmintClient.sdk(key: apiKey)
+            sdk = CrossmintClient.sdk(key: apiKey, authManager: authManager)
         } else {
             sdk = NoOpCrossmintClientSDK()
         }
@@ -82,7 +86,6 @@ final public class CrossmintSDK: ObservableObject {
     }
 
     public func logout() async throws {
-        _ = try await authManager.logout()
         crossmintTEE.resetState()
     }
 }

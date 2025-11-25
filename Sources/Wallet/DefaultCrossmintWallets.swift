@@ -85,40 +85,6 @@ Review if the .crossmintEnvironmentObject modifier is used as expected.
         chain.isValid(isProductionEnvironment: smartWalletService.isProductionEnvironment)
     }
 
-    private func getEffectiveSigner(
-        or signer: any Signer
-    ) async throws(SignerError) -> any Signer {
-        switch signer.signerType {
-        case .externalWallet:
-            await getStoredKeyPairSigner() ?? signer
-        case .passkey, .apiKey, .email:
-            signer
-        }
-    }
-
-    private func updateEffectiveSigner(_ signer: any Signer) async {
-        guard let evmKeyPairSigner = signer as? EVMKeyPairSigner else { return }
-        await storeEVMKeyPairSigner(evmKeyPairSigner)
-    }
-
-    private func getStoredKeyPairSigner() async -> EVMKeyPairSigner? {
-        if let email = await smartWalletService.email,
-           let storedPrivateKey = secureWalletStorage.getPrivateKey(forEmail: email),
-           let evmKeyPairSigner = try? EVMKeyPairSigner(privateKey: storedPrivateKey) {
-            Logger.smartWallet.info("Using stored private key for email: \(email)")
-            return evmKeyPairSigner
-        }
-        return nil
-    }
-
-    private func storeEVMKeyPairSigner(_ evmKeyPairSigner: EVMKeyPairSigner) async {
-        if let email = await smartWalletService.email {
-            await secureWalletStorage.savePrivateKey(evmKeyPairSigner.privateKey, forEmail: email)
-        } else {
-            Logger.smartWallet.error("Email not found, unable to save private key")
-        }
-    }
-
     private func initializeSigner(
         _ effectiveSigner: any Signer
     ) async throws(WalletError) {
@@ -149,22 +115,17 @@ Review if the .crossmintEnvironmentObject modifier is used as expected.
         walletType: WalletType,
         options: WalletOptions?
     ) async throws(WalletError) -> WalletApiModel {
-        guard let effectiveSigner: any Signer = try? await getEffectiveSigner(or: signer) else {
-            throw .walletGeneric("Invalid signer")
-        }
-
-        try await initializeSigner(effectiveSigner)
+        try await initializeSigner(signer)
 
         options?.experimentalCallbacks.onWalletCreationStart()
         let walletApiModel = try await smartWalletService.createWallet(
             CreateWalletParams(
                 chainType: chainType,
                 type: walletType,
-                config: .init(adminSigner: await effectiveSigner.adminSigner)
+                config: .init(adminSigner: await signer.adminSigner)
             )
         )
 
-        await updateEffectiveSigner(effectiveSigner)
         return walletApiModel
     }
 }

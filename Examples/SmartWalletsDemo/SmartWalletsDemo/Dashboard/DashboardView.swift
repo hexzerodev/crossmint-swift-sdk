@@ -233,7 +233,7 @@ struct DashboardView: View {
     }
 
     private func obtainOrCreateWallet(_ updateLoadingStatus: Bool = false) async {
-        guard let email = await authManager.email else {
+        guard let email = await crossmintAuthManager.email else {
             await MainActor.run {
                 if updateLoadingStatus {
                     creatingWallet = false

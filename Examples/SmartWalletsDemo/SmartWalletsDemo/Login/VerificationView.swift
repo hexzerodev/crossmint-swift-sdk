@@ -83,7 +83,7 @@ struct VerificationView: View {
         isVerifying = true
         Task {
             do {
-                let status = try await authManager.otpAuthentication(
+                let status = try await crossmintAuthManager.otpAuthentication(
                     email: email,
                     code: verificationCode,
                     forceRefresh: false
@@ -115,7 +115,7 @@ struct VerificationView: View {
     private func resendCode() {
         Task {
             do {
-                let status = try await authManager.otpAuthentication(
+                let status = try await crossmintAuthManager.otpAuthentication(
                     email: email,
                     code: nil,
                     forceRefresh: true
@@ -137,7 +137,7 @@ struct VerificationView: View {
         }
 
         Task {
-            _ = await authManager.reset()
+            _ = await crossmintAuthManager.reset()
             DispatchQueue.main.asyncAfter(deadline: .now() + AnimationConstants.duration) {
                 authenticationStatus = .nonAuthenticated
             }

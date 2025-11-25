@@ -7,7 +7,7 @@ struct SmartWalletsDemoApp: App {
         WindowGroup {
             SplashScreen()
                 .crossmintNonCustodialSigner(
-                    CrossmintSDK.shared(apiKey: "ck_staging_YOUR_API_KEY")
+                    CrossmintSDK.shared(apiKey: crossmintApiKey, authManager: crossmintAuthManager)
                 )
         }
     }

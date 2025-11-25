@@ -98,7 +98,7 @@ struct SignInView: View {
         isSigningIn = true
         Task {
             do {
-                let status = try await authManager.otpAuthentication(
+                let status = try await crossmintAuthManager.otpAuthentication(
                     email: email,
                     code: nil,
                     forceRefresh: false

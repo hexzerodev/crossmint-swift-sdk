@@ -9,7 +9,7 @@ struct SolanaDemoApp: App {
         WindowGroup {
             SplashScreen()
                 .crossmintNonCustodialSigner(
-                    CrossmintSDK.shared(apiKey: key, logLevel: .debug)
+                    CrossmintSDK.shared(apiKey: crossmintApiKey, authManager: crossmintAuthManager, logLevel: .debug)
                 )
         }
     }
