@@ -19,14 +19,17 @@ protocol EmailSigner: Signer {
     var crossmintTEE: CrossmintTEE? { get }
     var keyType: String { get async }
     var encoding: String { get async }
+    var email: String? { get async }
 
     func load() async throws(EmailSignerError)
     func processMessage(_ message: String) -> String
 }
 
 extension EmailSigner {
+    @MainActor
     public func sign(message: String) async throws(SignerError) -> String {
         guard let crossmintTEE = crossmintTEE else { throw .notStarted }
+        crossmintTEE.email = await email
         do {
             return try await crossmintTEE.signTransaction(
                 transaction: processMessage(message),

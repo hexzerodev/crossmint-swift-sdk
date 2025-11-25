@@ -1,7 +1,12 @@
 import Logger
+import CrossmintService
 import SecureStorage
 
-public actor DefaultAuthManager: AuthManager {
+public actor CrossmintAuthManager: AuthManager {
+    enum Errors: Error {
+        case noBundleIdFound
+    }
+
     private let authService: AuthService
     private let secureStorage: SecureStorage
     private var otpAuthenticationStatus: OTPAuthenticationStatus = .authenticationStatus(.nonAuthenticated)
@@ -37,6 +42,20 @@ public actor DefaultAuthManager: AuthManager {
     ) {
         self.authService = authService
         self.secureStorage = secureStorage
+    }
+
+    public init(apiKey apiKeyString: String) throws {
+        let apiKey = try ApiKey(key: apiKeyString)
+        guard let bundleId = Bundle.main.bundleIdentifier else {
+            throw Errors.noBundleIdFound
+        }
+
+        let secureStorage = KeychainSecureStorage(bundleId: bundleId)
+        let crossmintService = DefaultCrossmintService(apiKey: apiKey, appIdentifier: bundleId)
+        self.init(
+            authService: DefaultAuthService(crossmintService: crossmintService),
+            secureStorage: secureStorage
+        )
     }
 
 #if DEBUG
@@ -114,9 +133,12 @@ public actor DefaultAuthManager: AuthManager {
         }
 
         do {
-            try await authService.logout(LogoutRequest(refresh: secret))
+            if !secret.isEmpty {
+                try await authService.logout(LogoutRequest(refresh: secret))
+            }
             secureStorage.clear()
             otpAuthenticationStatus = .authenticationStatus(.nonAuthenticated)
+            _authenticationStatus = .nonAuthenticated
             return otpAuthenticationStatus
         } catch {
             Logger.auth.error("Error while logging out: \(error.localizedDescription)")
@@ -127,6 +149,17 @@ public actor DefaultAuthManager: AuthManager {
     public func reset() async -> OTPAuthenticationStatus {
         otpAuthenticationStatus = .authenticationStatus(.nonAuthenticated)
         return otpAuthenticationStatus
+    }
+
+    public func setJWT(_ jwt: String) async {
+        jwtRefreshTimer?.invalidate()
+        let authStatus = AuthenticationStatus.authenticated(
+            email: "",
+            jwt: jwt,
+            secret: ""
+        )
+        otpAuthenticationStatus = .authenticationStatus(authStatus)
+        _authenticationStatus = authStatus
     }
 
     private func startEmailValidation(email: String) async throws(AuthError) -> OTPAuthenticationStatus {

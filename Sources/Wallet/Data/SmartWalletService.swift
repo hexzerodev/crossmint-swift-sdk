@@ -4,7 +4,6 @@ import CrossmintService
 
 public protocol SmartWalletService: AuthenticatedService, Sendable {
     var isProductionEnvironment: Bool { get }
-    var email: String? { get async }
 
     func getWallet(
         _ request: GetMeWalletRequest

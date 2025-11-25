@@ -29,20 +29,26 @@ public final class SolanaEmailSigner: EmailSigner, Sendable {
             "base58"
         }
     }
+
+    public var email: String? {
+        get async {
+            await state.email
+        }
+    }
+
     nonisolated public let signerType: SignerType = .email
 
-    public init(crossmintTEE: CrossmintTEE?) {
+    public init(email: String, crossmintTEE: CrossmintTEE?) {
         self.crossmintTEE = crossmintTEE
+        Task {
+            await state.update(email: email)
+        }
     }
 
     public func initialize(_ service: SmartWalletService?) async throws(SignerError) {
-        guard await !state.isInitialized else { return }
-
-        guard let email = await service?.email else {
+        guard await state.isInitialized else {
             throw SignerError.invalidEmail
         }
-
-        await state.update(email: email)
     }
 
     func processMessage(_ message: String) -> String {

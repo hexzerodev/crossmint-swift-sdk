@@ -132,7 +132,7 @@ struct SplashScreen: View {
         guard authenticationStatus == nil else { return }
         isLoading = true
         do {
-            authenticationStatus = try await authManager.authenticationStatus
+            authenticationStatus = try await crossmintAuthManager.authenticationStatus
         } catch {
             if case .signInRequired = error {
                 self.error = .invalidCredentialsStored

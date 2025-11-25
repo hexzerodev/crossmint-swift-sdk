@@ -28,6 +28,7 @@ public final class CrossmintTEE: ObservableObject {
     private var isHandshakeCompleted = false
     private let auth: AuthManager
     private let apiKey: String
+    public var email: String?
 
     private var otpContinuation: CheckedContinuation<String, Swift.Error>?
     @Published public var isOTPRequired = false
@@ -68,7 +69,7 @@ public final class CrossmintTEE: ObservableObject {
             case .newDevice:
                 let onboardingResponse = try await startOnboarding(
                     jwt: jwt,
-                    authId: try await getAuthId()
+                    authId: try getAuthId()
                 )
 
                 guard onboardingResponse.status == .success else {
@@ -219,8 +220,8 @@ public final class CrossmintTEE: ObservableObject {
         }
     }
 
-    private func getAuthId() async throws(Error) -> String {
-        guard let email = await auth.email else {
+    private func getAuthId() throws(Error) -> String {
+        guard let email = email else {
             throw .authMissing
         }
         return "email:\(email)"

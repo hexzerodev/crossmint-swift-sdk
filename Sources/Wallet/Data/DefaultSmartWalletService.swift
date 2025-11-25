@@ -13,12 +13,6 @@ public final class DefaultSmartWalletService: SmartWalletService {
         crossmintService.isProductionEnvironment
     }
 
-    public var email: String? {
-        get async {
-            await authManager.email
-        }
-    }
-
     public init(
         crossmintService: CrossmintService,
         authManager: AuthManager,
