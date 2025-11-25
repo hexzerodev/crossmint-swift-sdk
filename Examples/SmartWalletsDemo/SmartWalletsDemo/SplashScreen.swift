@@ -34,7 +34,7 @@ struct SplashScreen: View {
         }
     }
 
-    @EnvironmentObject var sdk: CrossmintSDK
+    private let sdk: CrossmintSDK = .shared
 
     @State private var isLoading: Bool = false
     @State private var authenticationStatus: AuthenticationStatus?
@@ -148,5 +148,5 @@ struct SplashScreen: View {
 }
 
 #Preview {
-    SplashScreen().environmentObject(CrossmintSDK.shared)
+    SplashScreen()
 }

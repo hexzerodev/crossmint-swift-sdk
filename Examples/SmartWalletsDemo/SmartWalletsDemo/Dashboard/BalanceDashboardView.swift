@@ -5,7 +5,7 @@ import UIKit
 
 // swiftlint:disable:next type_body_length
 struct BalanceDashboardView: View {
-    @EnvironmentObject var sdk: CrossmintSDK
+    private let sdk: CrossmintSDK = .shared
 
     let wallet: EVMWallet
 

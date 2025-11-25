@@ -1,16 +1,16 @@
 import SwiftUI
 import CrossmintClient
 
+let key = "ck_staging_YOUR_API_KEY"
+
 @main
 struct SolanaDemoApp: App {
     var body: some Scene {
         WindowGroup {
             SplashScreen()
-                .crossmintEnvironmentObject(
+                .crossmintNonCustodialSigner(
                     CrossmintSDK.shared(apiKey: crossmintApiKey, authManager: crossmintAuthManager, logLevel: .debug)
-                ) {
-                    OTPValidatorView(nonCustodialSignerCallback: $0)
-                }
+                )
         }
     }
 }

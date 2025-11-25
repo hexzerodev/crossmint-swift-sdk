@@ -4,7 +4,7 @@ import CrossmintCommonTypes
 import UIKit
 
 struct BalanceDashboardView: View {
-    @EnvironmentObject var sdk: CrossmintSDK
+    private let sdk: CrossmintSDK = .shared
 
     let wallet: Wallet
 

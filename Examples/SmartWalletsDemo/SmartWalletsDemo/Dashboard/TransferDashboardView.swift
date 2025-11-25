@@ -7,7 +7,7 @@ import CrossmintCommonTypes
 struct TransferDashboardView: View {
     let wallet: Wallet
 
-    @EnvironmentObject var sdk: CrossmintSDK
+    private let sdk: CrossmintSDK = .shared
     @EnvironmentObject var alertViewModel: AlertViewModel
 
     @Binding var balances: Balance?

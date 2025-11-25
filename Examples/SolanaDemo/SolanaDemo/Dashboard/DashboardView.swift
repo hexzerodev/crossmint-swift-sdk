@@ -2,7 +2,7 @@ import SwiftUI
 import CrossmintClient
 
 struct DashboardView: View {
-    @EnvironmentObject var sdk: CrossmintSDK
+    private let sdk: CrossmintSDK = .shared
 
     @StateObject private var alertViewModel = AlertViewModel()
 
@@ -326,5 +326,4 @@ struct TabButton: View {
 #Preview {
     DashboardView(
         authenticationStatus: .constant(.authenticated(email: "some", jwt: "some", secret: "some")))
-    .environmentObject(CrossmintSDK.shared)
 }

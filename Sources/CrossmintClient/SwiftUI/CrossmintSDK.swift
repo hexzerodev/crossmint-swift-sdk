@@ -1,5 +1,6 @@
 import Auth
 @_exported import AuthUI
+import Combine
 @_exported import CrossmintCommonTypes
 @_exported import CrossmintService
 import Logger
@@ -39,6 +40,16 @@ final public class CrossmintSDK: ObservableObject {
     public let crossmintService: CrossmintService
 
     let crossmintTEE: CrossmintTEE
+
+    public var isOTPRequred: Published<Bool>.Publisher {
+        crossmintTEE.$isOTPRequired
+    }
+    public func submit(otp: String) {
+        crossmintTEE.provideOTP(otp)
+    }
+    public func cancelTransaction() {
+        crossmintTEE.cancelOTP()
+    }
 
     public var isProductionEnvironment: Bool {
         crossmintService.isProductionEnvironment

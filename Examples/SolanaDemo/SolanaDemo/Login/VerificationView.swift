@@ -2,7 +2,7 @@ import SwiftUI
 import CrossmintClient
 
 struct VerificationView: View {
-    @EnvironmentObject var sdk: CrossmintSDK
+    private let sdk: CrossmintSDK = .shared
 
     @Binding var authenticationStatus: AuthenticationStatus?
 
@@ -156,5 +156,4 @@ struct VerificationView: View {
         email: "example@email.com",
         emailId: "sample-id"
     )
-    .environmentObject(CrossmintSDK.shared)
 }
