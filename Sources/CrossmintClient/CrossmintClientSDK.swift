@@ -28,7 +28,7 @@ public final class CrossmintClientSDK: ClientSDK, Sendable {
         if let authManager {
             self.authManager = authManager
         } else {
-            self.authManager = DefaultAuthManager(
+            self.authManager = CrossmintAuthManager(
                 authService: DefaultAuthService(crossmintService: crossmintService),
                 secureStorage: secureStorage
             )

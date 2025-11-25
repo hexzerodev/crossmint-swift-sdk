@@ -15,6 +15,7 @@
 		AC0102032DD700000000002 /* VerificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC0102022DD700000000002 /* VerificationView.swift */; };
 		AC0102052DD700000000003 /* CustomTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC0102042DD700000000003 /* CustomTextField.swift */; };
 		AC0102072DD800000000001 /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC0102062DD800000000001 /* DashboardView.swift */; };
+		E52EB5192ED54AED004256E2 /* CrossmintAuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E52EB5182ED54AEB004256E2 /* CrossmintAuthManager.swift */; };
 		EB49FDE22DC35C0D00BAAFEB /* CrossmintClientSDK in Frameworks */ = {isa = PBXBuildFile; productRef = EB49FDE12DC35C0D00BAAFEB /* CrossmintClientSDK */; };
 		EB72B92C2E3CFA2C002A668E /* OTPValidatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB72B92A2E3CFA2B002A668E /* OTPValidatorView.swift */; };
 		EB9BDDE22DC4CFBF003999C7 /* BalanceDashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB9BDDE12DC4CFBF003999C7 /* BalanceDashboardView.swift */; };
@@ -42,6 +43,7 @@
 		AC0102022DD700000000002 /* VerificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerificationView.swift; sourceTree = "<group>"; };
 		AC0102042DD700000000003 /* CustomTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTextField.swift; sourceTree = "<group>"; };
 		AC0102062DD800000000001 /* DashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
+		E52EB5182ED54AEB004256E2 /* CrossmintAuthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CrossmintAuthManager.swift; sourceTree = "<group>"; };
 		EB1EA11F2DC0F6550018C2C3 /* SolanaDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SolanaDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EB72B92A2E3CFA2B002A668E /* OTPValidatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OTPValidatorView.swift; sourceTree = "<group>"; };
 		EB9BDDE12DC4CFBF003999C7 /* BalanceDashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BalanceDashboardView.swift; sourceTree = "<group>"; };
@@ -152,6 +154,7 @@
 			children = (
 				AC0102002DD700000000001 /* SignInView.swift */,
 				AC0102022DD700000000002 /* VerificationView.swift */,
+				E52EB5182ED54AEB004256E2 /* CrossmintAuthManager.swift */,
 			);
 			path = Login;
 			sourceTree = "<group>";
@@ -242,6 +245,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				EB9BDDF32DC4E41C003999C7 /* Color+hex.swift in Sources */,
+				E52EB5192ED54AED004256E2 /* CrossmintAuthManager.swift in Sources */,
 				EB72B92C2E3CFA2C002A668E /* OTPValidatorView.swift in Sources */,
 				EBEC0BD52DC396EA000B59F1 /* SecondaryButton.swift in Sources */,
 				EB9BDDE62DC4CFE2003999C7 /* NFTDashboardView.swift in Sources */,

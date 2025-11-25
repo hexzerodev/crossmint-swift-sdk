@@ -69,7 +69,7 @@ public final class CrossmintTEE: ObservableObject {
             case .newDevice:
                 let onboardingResponse = try await startOnboarding(
                     jwt: jwt,
-                    authId: try await getAuthId()
+                    authId: try getAuthId()
                 )
 
                 guard onboardingResponse.status == .success else {

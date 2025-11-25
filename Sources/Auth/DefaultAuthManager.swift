@@ -1,7 +1,8 @@
 import Logger
+import CrossmintService
 import SecureStorage
 
-public actor DefaultAuthManager: AuthManager {
+public actor CrossmintAuthManager: AuthManager {
     private let authService: AuthService
     private let secureStorage: SecureStorage
     private var otpAuthenticationStatus: OTPAuthenticationStatus = .authenticationStatus(.nonAuthenticated)
@@ -37,6 +38,17 @@ public actor DefaultAuthManager: AuthManager {
     ) {
         self.authService = authService
         self.secureStorage = secureStorage
+    }
+    
+    public init(apiKey apiKeyString: String) throws {
+        let apiKey = try ApiKey(key: apiKeyString)
+        let bundleId = Bundle.main.bundleIdentifier!
+        let secureStorage = KeychainSecureStorage(bundleId: bundleId)
+        let crossmintService = DefaultCrossmintService(apiKey: apiKey, appIdentifier: bundleId)
+        self.init(
+            authService: DefaultAuthService(crossmintService: crossmintService),
+            secureStorage: secureStorage
+        )
     }
 
 #if DEBUG

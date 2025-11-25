@@ -15,6 +15,7 @@
 		AC0102032DD700000000002 /* VerificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC0102022DD700000000002 /* VerificationView.swift */; };
 		AC0102052DD700000000003 /* CustomTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC0102042DD700000000003 /* CustomTextField.swift */; };
 		AC0102072DD800000000001 /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC0102062DD800000000001 /* DashboardView.swift */; };
+		E52EB51B2ED54D19004256E2 /* CrossmintAuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E52EB51A2ED54D15004256E2 /* CrossmintAuthManager.swift */; };
 		EB49FDE22DC35C0D00BAAFEB /* CrossmintClientSDK in Frameworks */ = {isa = PBXBuildFile; productRef = EB49FDE12DC35C0D00BAAFEB /* CrossmintClientSDK */; };
 		EB5D83162E45FA36002F8EF1 /* OTPValidatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB5D83152E45FA36002F8EF1 /* OTPValidatorView.swift */; };
 		EB9BDDE22DC4CFBF003999C7 /* BalanceDashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB9BDDE12DC4CFBF003999C7 /* BalanceDashboardView.swift */; };
@@ -42,6 +43,7 @@
 		AC0102022DD700000000002 /* VerificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerificationView.swift; sourceTree = "<group>"; };
 		AC0102042DD700000000003 /* CustomTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTextField.swift; sourceTree = "<group>"; };
 		AC0102062DD800000000001 /* DashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
+		E52EB51A2ED54D15004256E2 /* CrossmintAuthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CrossmintAuthManager.swift; sourceTree = "<group>"; };
 		EB1EA11F2DC0F6550018C2C3 /* SmartWalletsDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SmartWalletsDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EB5D83152E45FA36002F8EF1 /* OTPValidatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OTPValidatorView.swift; sourceTree = "<group>"; };
 		EB9BDDDA2DC4B20C003999C7 /* SmartWalletsDemo.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SmartWalletsDemo.entitlements; sourceTree = "<group>"; };
@@ -152,6 +154,7 @@
 		EB9BDDE82DC4D048003999C7 /* Login */ = {
 			isa = PBXGroup;
 			children = (
+				E52EB51A2ED54D15004256E2 /* CrossmintAuthManager.swift */,
 				AC0102002DD700000000001 /* SignInView.swift */,
 				AC0102022DD700000000002 /* VerificationView.swift */,
 			);
@@ -250,6 +253,7 @@
 				EB9BDDE42DC4CFCF003999C7 /* TransferDashboardView.swift in Sources */,
 				EB9BDDE22DC4CFBF003999C7 /* BalanceDashboardView.swift in Sources */,
 				AC0102012DD700000000001 /* SignInView.swift in Sources */,
+				E52EB51B2ED54D19004256E2 /* CrossmintAuthManager.swift in Sources */,
 				AC0102032DD700000000002 /* VerificationView.swift in Sources */,
 				AC0102052DD700000000003 /* CustomTextField.swift in Sources */,
 				AC0102072DD800000000001 /* DashboardView.swift in Sources */,

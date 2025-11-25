@@ -230,8 +230,7 @@ struct DashboardView: View {
 
     private func obtainOrCreateWallet(_ updateLoadingStatus: Bool = false) async {
         do {
-            guard let defaultAuthManager = authManager as? DefaultAuthManager,
-                  let email = await defaultAuthManager.email else {
+            guard let email = await crossmintAuthManager.email else {
                 throw WalletError.walletGeneric("Email not available")
             }
 

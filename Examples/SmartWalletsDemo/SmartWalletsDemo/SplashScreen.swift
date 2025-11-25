@@ -132,12 +132,9 @@ struct SplashScreen: View {
         guard authenticationStatus == nil else { return }
         isLoading = true
         do {
-            guard let defaultAuthManager = authManager as? DefaultAuthManager else {
-                throw AuthError.generic("DefaultAuthManager required for OTP authentication")
-            }
-            authenticationStatus = try await defaultAuthManager.authenticationStatus
+            authenticationStatus = try await crossmintAuthManager.authenticationStatus
         } catch {
-            if case AuthError.signInRequired = error {
+            if case .signInRequired = error {
                 self.error = .invalidCredentialsStored
             } else {
                 self.error = .genericError
