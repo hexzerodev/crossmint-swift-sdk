@@ -55,6 +55,9 @@ let package = Package(
 //                "Payments",
                 "SecureStorage"
             ],
+            resources: [
+                .process("PrivacyInfo.xcprivacy")
+            ],
             plugins: basePlugins
         ),
         .target(
