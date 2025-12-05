@@ -37,7 +37,7 @@ let package = Package(
         .package(url: "https://github.com/bitflying/SwiftKeccak", exact: "0.1.2"),
         .package(url: "https://github.com/attaswift/BigInt", from: "5.4.0"),
         .package(url: "https://github.com/ekscrypto/SwiftEmailValidator", exact: "1.0.4"),
-        .package(url: "https://github.com/valpackett/SwiftCBOR", branch: "master"),
+        .package(url: "https://github.com/valpackett/SwiftCBOR", exact: "0.5.0"),
         .package(url: "https://github.com/DataDog/dd-sdk-ios.git", from: "2.0.0"),
         // Plugins
         // If the Swiftlint version is updated, update the binary in the Makefile.
