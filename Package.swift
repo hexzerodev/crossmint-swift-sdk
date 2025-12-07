@@ -110,7 +110,7 @@ let package = Package(
         ),
         .target(
             name: "Auth",
-            dependencies: baseDependencies + ["CrossmintService", "SecureStorage", "Web"],
+            dependencies: baseDependencies + ["CrossmintService", "SecureStorage"],
             plugins: basePlugins
         ),
         .target(
