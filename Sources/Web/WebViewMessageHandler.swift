@@ -48,14 +48,13 @@ public class WebViewMessageHandler {
     }
 
     public func processIncomingMessage(_ messageBody: Any) {
-        Logger.web.info("\(messageBody)")
         guard let messageData = extractMessageData(from: messageBody) else {
             Logger.web.warn("Failed to extract message data from: \(messageBody)")
             return
         }
 
         guard let messageTypeInfo = extractMessageType(from: messageData) else {
-            Logger.web.warn("Failed to extract message type from message data")
+            Logger.web.warn("Failed to extract message type from message data: \(messageBody)")
             return
         }
 
