@@ -1,4 +1,4 @@
-import Auth
+import CrossmintAuth
 import Foundation
 import Testing
 @testable import Web

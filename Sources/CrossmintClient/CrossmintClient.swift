@@ -1,6 +1,6 @@
 import CrossmintService
 import Logger
-import Auth
+import CrossmintAuth
 
 public actor CrossmintClient {
     public enum Error: Swift.Error {

@@ -1,4 +1,4 @@
-import Auth
+import CrossmintAuth
 import CrossmintService
 import Wallet
 

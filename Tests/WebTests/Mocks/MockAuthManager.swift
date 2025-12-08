@@ -1,5 +1,5 @@
 import Foundation
-import Auth
+import CrossmintAuth
 
 actor MockAuthManager: AuthManager {
     private var _jwt: String?

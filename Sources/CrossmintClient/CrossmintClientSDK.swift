@@ -1,4 +1,4 @@
-@_exported import Auth
+@_exported import CrossmintAuth
 import CrossmintService
 import Foundation
 import Logger
@@ -10,7 +10,7 @@ public final class CrossmintClientSDK: ClientSDK, Sendable {
     private let secureStorage: SecureStorage
     private let secureWalletStorage: SecureWalletStorage
     public let crossmintService: CrossmintService
-    public let authManager: any Auth.AuthManager
+    public let authManager: any CrossmintAuth.AuthManager
 
     init(apiKey: ApiKey, authManager: AuthManager? = nil) {
         self.apiKey = apiKey
