@@ -2,7 +2,6 @@ import SwiftUI
 import CrossmintClient
 import Wallet
 
-// swiftlint:disable:next type_body_length
 struct DashboardView: View {
     private let sdk: CrossmintSDK = .shared
 
@@ -246,10 +245,7 @@ struct DashboardView: View {
         do {
             let wallet = try await sdk.crossmintWallets.getOrCreateWallet(
                 chain: .baseSepolia,
-                signer: .passkey(
-                    name: email,
-                    host: "wallets-ios.demos-crossmint.com"
-                )
+                signer: .email(email)
             )
 
             await MainActor.run {

@@ -3,7 +3,6 @@ import SwiftUI
 import CrossmintCommonTypes
 import UIKit
 
-// swiftlint:disable:next type_body_length
 struct BalanceDashboardView: View {
     private let sdk: CrossmintSDK = .shared
 

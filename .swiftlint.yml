@@ -21,5 +21,9 @@ force_unwrapping:
   severity: error
 
 nesting:
-  type_level: 4     
+  type_level: 4
   statement_level: 4
+
+type_body_length:
+  warning: 400
+  error: 500

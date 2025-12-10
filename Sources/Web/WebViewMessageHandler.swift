@@ -37,6 +37,7 @@ public class WebViewMessageHandler {
     }
 
     public func reset() {
+        Logger.web.debug("reset() - Resetting message handler, clearing \(messageListeners.count) listeners, \(pendingMessages.count) pending messages, \(messageBuffer.count) buffered messages")
         isReady = false
         pendingMessages.removeAll()
         messageBuffer.removeAll()
@@ -45,6 +46,7 @@ public class WebViewMessageHandler {
         }
         messageListeners.removeAll()
         messagePredicates.removeAll()
+        Logger.web.debug("Message handler reset complete")
     }
 
     public func processIncomingMessage(_ messageBody: Any) {
@@ -97,6 +99,7 @@ public class WebViewMessageHandler {
 
     private func extractMessageType(from data: Data) -> String? {
         guard let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] else {
+            Logger.web.warn("Failed to deserialize message data as JSON dictionary")
             return nil
         }
 
@@ -115,7 +118,7 @@ public class WebViewMessageHandler {
             case .debug:
                 Logger.web.debug(logMessage)
             case .info, .log, .trace:
-                Logger.web.info(logMessage)
+                Logger.web.debug(logMessage)
             }
         }
     }
@@ -139,15 +142,21 @@ public class WebViewMessageHandler {
         matching predicate: @escaping @Sendable (T) -> Bool = { _ in true },
         timeout: TimeInterval = 2.0
     ) async throws -> T {
+        Logger.web.debug("waitForMessage() - Waiting for message of type \(type) with timeout \(timeout)s")
+
         // First check the message buffer
         cleanupMessageBuffer()
+        Logger.web.debug("Checking message buffer for existing message, buffer size: \(messageBuffer.count)")
         for (index, bufferedMessage) in messageBuffer.enumerated() {
             if let typedMessage = bufferedMessage.message as? T, predicate(typedMessage) {
                 // Remove the message from buffer since it's being consumed
                 messageBuffer.remove(at: index)
+                Logger.web.debug("Found message of type \(type) in buffer, returning immediately")
                 return typedMessage
             }
         }
+
+        Logger.web.debug("Message not in buffer, registering listener and waiting")
 
         // If not found in buffer, wait for new messages
         let id = UUID()
@@ -158,7 +167,7 @@ public class WebViewMessageHandler {
             if let continuation = messageListeners[id] {
                 messageListeners.removeValue(forKey: id)
                 messagePredicates.removeValue(forKey: id)
-                Logger.web.error("Timed out waiting for message \(type)")
+                Logger.web.error("Timed out waiting for message \(type) after \(timeout)s")
                 continuation.resume(throwing: WebViewError.timeout)
             }
         }
@@ -179,9 +188,11 @@ public class WebViewMessageHandler {
         }
 
         guard let typedResult = result as? T else {
+            Logger.web.error("Failed to cast result to type \(type)")
             throw WebViewError.decodingError
         }
 
+        Logger.web.debug("Successfully received message of type \(type)")
         return typedResult
     }
 

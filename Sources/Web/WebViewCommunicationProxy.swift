@@ -49,27 +49,36 @@ public class DefaultWebViewCommunicationProxy: NSObject, ObservableObject, WKScr
     }
 
     public func loadURL(_ url: URL) async throws {
-        guard let webView = webView else {
+        Logger.web.debug("loadURL() called with URL: \(url)")
 
+        guard let webView = webView else {
+            Logger.web.error("loadURL() failed: webView is not available")
             throw WebViewError.webViewNotAvailable
         }
 
         guard requiresLoading(forUrl: url) else {
-            Logger.web.info("The url was already loaded")
+            Logger.web.debug("URL \(url) was already loaded, skipping")
             return
         }
 
+        Logger.web.debug("URL requires loading, starting navigation")
+
         // Cancel any existing navigation continuation
-        navigationContinuation?.resume(throwing: CancellationError())
-        navigationContinuation = nil
+        if navigationContinuation != nil {
+            Logger.web.warn("Cancelling existing navigation continuation")
+            navigationContinuation?.resume(throwing: CancellationError())
+            navigationContinuation = nil
+        }
 
         try await withCheckedThrowingContinuation { continuation in
             navigationContinuation = continuation
             loadContent(url, in: webView)
         }
+        Logger.web.debug("URL \(url) loaded successfully")
     }
 
     public func resetLoadedContent() {
+        Logger.web.debug("resetLoadedContent() - Resetting loaded content and message handler")
         loadedContent = nil
         isPageLoaded = false
         Task { @MainActor in
@@ -78,7 +87,10 @@ public class DefaultWebViewCommunicationProxy: NSObject, ObservableObject, WKScr
     }
 
     public func loadContent(_ content: URL) {
-        guard let webView = webView else { return }
+        guard let webView = webView else {
+            Logger.web.warn("Cannot load content: webView is nil")
+            return
+        }
         loadContent(content, in: webView)
     }
 
@@ -86,7 +98,10 @@ public class DefaultWebViewCommunicationProxy: NSObject, ObservableObject, WKScr
         _ userContentController: WKUserContentController,
         didReceive message: WKScriptMessage
     ) {
-        guard message.name == name else { return }
+        guard message.name == name else {
+            Logger.web.debug("Received message with unexpected name: \(message.name), expected: \(name)")
+            return
+        }
 
         Task { @MainActor in
             messageHandler.processIncomingMessage(message.body)
@@ -110,7 +125,7 @@ public class DefaultWebViewCommunicationProxy: NSObject, ObservableObject, WKScr
 
         // If page is not loaded yet, queue the message
         if messageHandler.queueMessage(messageData) {
-            Logger.web.info("Frame not yet loaded, enqueuing message")
+            Logger.web.debug("Frame not yet loaded, enqueuing message")
             return nil
         }
 
@@ -145,6 +160,7 @@ public class DefaultWebViewCommunicationProxy: NSObject, ObservableObject, WKScr
     @MainActor
     private func executeJavaScript(_ messageData: Data, in webView: WKWebView) async throws -> Any? {
         guard let jsonString = String(data: messageData, encoding: .utf8) else {
+            Logger.web.error("Failed to encode message data to UTF-8 string")
             throw WebViewError.encodingError
         }
 
@@ -173,6 +189,7 @@ public class DefaultWebViewCommunicationProxy: NSObject, ObservableObject, WKScr
     }
 
     private func loadContent(_ content: URL, in webView: WKWebView) {
+        Logger.web.debug("loadContent() - Loading URL in WebView: \(content)")
         loadedContent = content
         isPageLoaded = false
         Task { @MainActor in
@@ -180,6 +197,7 @@ public class DefaultWebViewCommunicationProxy: NSObject, ObservableObject, WKScr
         }
 
         webView.load(URLRequest(url: content))
+        Logger.web.debug("URLRequest sent to WebView")
     }
 
     private func requiresLoading(forUrl url: URL) -> Bool {
@@ -193,7 +211,7 @@ public class DefaultWebViewCommunicationProxy: NSObject, ObservableObject, WKScr
 
 extension DefaultWebViewCommunicationProxy: WKNavigationDelegate {
     public func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
-        Logger.web.info("Webview finished loading")
+        Logger.web.debug("Webview finished loading")
         isPageLoaded = true
         Task { @MainActor in
             messageHandler.setReady(true)
