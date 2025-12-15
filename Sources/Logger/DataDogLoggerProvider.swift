@@ -32,33 +32,39 @@ final class DataDogLoggerProvider: LoggerProvider {
     }
 
     func debug(_ message: String, attributes: [String: any Encodable]?) {
-        logger.debug(message, attributes: buildAttributes(attributes))
+        logger.debug(formatMessage(message, attributes: attributes), attributes: buildBaseAttributes())
     }
 
     func error(_ message: String, attributes: [String: any Encodable]?) {
-        logger.error(message, attributes: buildAttributes(attributes))
+        logger.error(formatMessage(message, attributes: attributes), attributes: buildBaseAttributes())
     }
 
     func info(_ message: String, attributes: [String: any Encodable]?) {
-        logger.info(message, attributes: buildAttributes(attributes))
+        logger.info(formatMessage(message, attributes: attributes), attributes: buildBaseAttributes())
     }
 
     func warn(_ message: String, attributes: [String: any Encodable]?) {
-        logger.warn(message, attributes: buildAttributes(attributes))
+        logger.warn(formatMessage(message, attributes: attributes), attributes: buildBaseAttributes())
     }
 
-    private func buildAttributes(_ attributes: [String: any Encodable]?) -> [String: Encodable] {
-        var loggerAttributes: [String: Encodable] = [
+    private func formatMessage(_ message: String, attributes: [String: any Encodable]?) -> String {
+        guard let attributes = attributes, !attributes.isEmpty else {
+            return message
+        }
+
+        let attributeStrings = attributes.map { key, value in
+            "\(key)=\(value)"
+        }.sorted().joined(separator: " ")
+
+        return "\(message) \(attributeStrings)"
+    }
+
+    private func buildBaseAttributes() -> [String: Encodable] {
+        [
             "service": service,
             "platform": "ios",
             "sdk_version": SDKVersion.version
         ]
-
-        if let attributes {
-            loggerAttributes.merge(attributes) { _, new in new }
-        }
-
-        return loggerAttributes
     }
 
     private static func setupDataDogIfNeeded(clientToken: String, environment: String) {

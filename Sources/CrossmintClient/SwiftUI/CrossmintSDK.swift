@@ -26,7 +26,7 @@ final public class CrossmintSDK: ObservableObject {
     public static func shared(
         apiKey: String,
         authManager: AuthManager? = nil,
-        logLevel: OSLogType = .default
+        logLevel: LogLevel = .error
     ) -> CrossmintSDK {
         if let existing = _shared {
             return existing

@@ -26,31 +26,66 @@ public final class DefaultSmartWalletService: SmartWalletService {
     public func getWallet(
         _ request: GetMeWalletRequest
     ) async throws(WalletError) -> WalletApiModel {
-        try await crossmintService.executeRequest(
-            Endpoint(
-                path: "/2025-06-09/wallets/me:\(request.chainType.rawValue)",
-                method: .get,
-                headers: authHeaders
-            ),
-            errorType: WalletError.self
-        )
+        Logger.smartWallet.info(LogEvents.apiGetWalletStart, attributes: [
+            "locator": "me:\(request.chainType.rawValue)"
+        ])
+
+        do {
+            let result: WalletApiModel = try await crossmintService.executeRequest(
+                Endpoint(
+                    path: "/2025-06-09/wallets/me:\(request.chainType.rawValue)",
+                    method: .get,
+                    headers: authHeaders
+                ),
+                errorType: WalletError.self
+            )
+
+            Logger.smartWallet.info(LogEvents.apiGetWalletSuccess, attributes: [
+                "address": result.address
+            ])
+
+            return result
+        } catch {
+            Logger.smartWallet.warn(LogEvents.apiGetWalletError, attributes: [
+                "error": "\(error)"
+            ])
+            throw error
+        }
     }
 
     public func createWallet(
         _ request: CreateWalletParams
     ) async throws(WalletError) -> WalletApiModel {
-        try await crossmintService.executeRequest(
-            Endpoint(
-                path: "/2025-06-09/wallets/me",
-                method: .post,
-                headers: authHeaders,
-                body: try jsonCoder.encodeRequest(
-                    request,
-                    errorType: WalletError.self
-                )
-            ),
-            errorType: WalletError.self
-        )
+        Logger.smartWallet.info(LogEvents.apiCreateWalletStart, attributes: [
+            "chain": request.chainType.rawValue,
+            "type": request.type.rawValue
+        ])
+
+        do {
+            let result: WalletApiModel = try await crossmintService.executeRequest(
+                Endpoint(
+                    path: "/2025-06-09/wallets/me",
+                    method: .post,
+                    headers: authHeaders,
+                    body: try jsonCoder.encodeRequest(
+                        request,
+                        errorType: WalletError.self
+                    )
+                ),
+                errorType: WalletError.self
+            )
+
+            Logger.smartWallet.info(LogEvents.apiCreateWalletSuccess, attributes: [
+                "address": result.address
+            ])
+
+            return result
+        } catch {
+            Logger.smartWallet.error(LogEvents.apiCreateWalletError, attributes: [
+                "error": "\(error)"
+            ])
+            throw error
+        }
     }
 
     public func getBalance(
@@ -190,31 +225,51 @@ public final class DefaultSmartWalletService: SmartWalletService {
         amount: String,
         idempotencyKey: String? = nil
     ) async throws(TransactionError) -> any TransactionApiModel {
+        Logger.smartWallet.info(LogEvents.apiSendStart, attributes: [
+            "walletLocator": "me:\(chainType)",
+            "recipient": recipient,
+            "token": tokenLocator,
+            "amount": amount
+        ])
+
         struct Body: Encodable {
             let recipient: String
             let amount: String
         }
 
-        let body = Body(
-            recipient: recipient,
-            amount: amount
-        )
-        var headers = await authHeaders
-        headers["x-idempotency-key"] = idempotencyKey ?? UUID().uuidString
-        let endpoint = Endpoint(
-            path: "/2025-06-09/wallets/me:\(chainType)/tokens/\(tokenLocator)/transfers",
-            method: .post,
-            headers: headers,
-            body: try jsonCoder.encodeRequest(
-                body,
-                errorType: TransactionError.self
+        do {
+            let body = Body(
+                recipient: recipient,
+                amount: amount
             )
-        )
+            var headers = await authHeaders
+            headers["x-idempotency-key"] = idempotencyKey ?? UUID().uuidString
+            let endpoint = Endpoint(
+                path: "/2025-06-09/wallets/me:\(chainType)/tokens/\(tokenLocator)/transfers",
+                method: .post,
+                headers: headers,
+                body: try jsonCoder.encodeRequest(
+                    body,
+                    errorType: TransactionError.self
+                )
+            )
 
-        return try await executeTransactionRequest(
-            endpoint: endpoint,
-            mapping: ChainType(rawValue: chainType).mappingType
-        )
+            let result = try await executeTransactionRequest(
+                endpoint: endpoint,
+                mapping: ChainType(rawValue: chainType).mappingType
+            )
+
+            Logger.smartWallet.info(LogEvents.apiSendSuccess, attributes: [
+                "transactionId": "\(result.id)"
+            ])
+
+            return result
+        } catch {
+            Logger.smartWallet.error(LogEvents.apiSendError, attributes: [
+                "error": "\(error)"
+            ])
+            throw error
+        }
     }
 
     public func createSignature(

@@ -1,6 +1,7 @@
 import BigInt
 import CrossmintCommonTypes
 import Foundation
+import Logger
 
 open class EVMWallet: Wallet, WalletOnChain, @unchecked Sendable {
     public typealias SpecificChain = EVMChain
@@ -64,11 +65,13 @@ open class EVMWallet: Wallet, WalletOnChain, @unchecked Sendable {
         data: String?,
         chain: EVMChain? = nil
     ) async throws(TransactionError) -> TransactionSummary {
+        Logger.smartWallet.info(LogEvents.evmSendTransactionStart)
+
         guard let evmAddress = try? EVMAddress(address: address) else {
             throw .transactionGeneric("Invalid address")
         }
 
-        guard let completedTransaction = try await super.sendTransaction(
+        guard let transaction = try await super.sendTransaction(
             CreateEVMTransactionRequest(
                 contractAddress: evmAddress,
                 value: value ?? "0",
@@ -76,9 +79,22 @@ open class EVMWallet: Wallet, WalletOnChain, @unchecked Sendable {
                 chain: chain ?? self.evmChain,
                 signer: self.config.adminSigner.locator
             )
-        )?.toCompleted() else {
+        ) else {
             throw .transactionGeneric("Unknown error")
         }
+
+        Logger.smartWallet.info(LogEvents.evmSendTransactionPrepared, attributes: [
+            "transactionId": transaction.id
+        ])
+
+        guard let completedTransaction = transaction.toCompleted() else {
+            throw .transactionGeneric("Unknown error")
+        }
+
+        Logger.smartWallet.info(LogEvents.evmSendTransactionSuccess, attributes: [
+            "transactionId": completedTransaction.id,
+            "hash": completedTransaction.onChain.txId
+        ])
 
         return completedTransaction.summary
     }
@@ -88,34 +104,51 @@ open class EVMWallet: Wallet, WalletOnChain, @unchecked Sendable {
         signer: (any AdminSignerData)? = nil,
         isSmartWalletSignature: Bool = true
     ) async throws(SignatureError) -> String {
+        Logger.smartWallet.info(LogEvents.evmSignMessageStart)
+
         let signer = signer ?? self.config.adminSigner
 
-        let signatureRequest = SignMessageRequest(
-            params: SignMessageRequest.Params(
-                message: message,
-                chain: super.chain,
-                signer: signer,
-                isSmartWalletSignature: isSmartWalletSignature
+        do {
+            let signatureRequest = SignMessageRequest(
+                params: SignMessageRequest.Params(
+                    message: message,
+                    chain: super.chain,
+                    signer: signer,
+                    isSmartWalletSignature: isSmartWalletSignature
+                )
             )
-        )
 
-        let response = try await createAndApproveSignature(
-            request: .init(
-                signMessageRequest: signatureRequest,
+            let response = try await createAndApproveSignature(
+                request: .init(
+                    signMessageRequest: signatureRequest,
+                    chainType: chain.chainType
+                )
+            )
+
+            Logger.smartWallet.info(LogEvents.evmSignMessagePrepared, attributes: [
+                "signatureId": response.id
+            ])
+
+            let completedSignature = try await pollSignatureWhilePending(
+                signatureId: response.id,
                 chainType: chain.chainType
             )
-        )
 
-        let completedSignature = try await pollSignatureWhilePending(
-            signatureId: response.id,
-            chainType: chain.chainType
-        )
+            guard let signature = extractSignature(from: completedSignature, for: signer) else {
+                throw SignatureError.approvalFailed
+            }
 
-        guard let signature = extractSignature(from: completedSignature, for: signer) else {
-            throw .approvalFailed
+            Logger.smartWallet.info(LogEvents.evmSignMessageSuccess, attributes: [
+                "signatureId": response.id
+            ])
+
+            return signature
+        } catch {
+            Logger.smartWallet.error(LogEvents.evmSignMessageError, attributes: [
+                "error": "\(error)"
+            ])
+            throw error as? SignatureError ?? .unknown
         }
-
-        return signature
     }
 
     public func signTypedData(
@@ -123,33 +156,50 @@ open class EVMWallet: Wallet, WalletOnChain, @unchecked Sendable {
         signer: (any AdminSignerData)? = nil,
         isSmartWalletSignature: Bool = true
     ) async throws(SignatureError) -> String {
+        Logger.smartWallet.info(LogEvents.evmSignTypedDataStart)
+
         let signer = signer ?? self.config.adminSigner
 
-        let signatureRequest = typedData.toSignTypedDataRequest(
-            chain: super.chain,
-            signer: signer,
-            isSmartWalletSignature: isSmartWalletSignature
-        )
+        do {
+            let signatureRequest = typedData.toSignTypedDataRequest(
+                chain: super.chain,
+                signer: signer,
+                isSmartWalletSignature: isSmartWalletSignature
+            )
 
-        let response = try await createAndApproveSignature(
-            request: .init(
-                signTypedDataRequest: signatureRequest,
+            let response = try await createAndApproveSignature(
+                request: .init(
+                    signTypedDataRequest: signatureRequest,
+                    chainType: chain.chainType
+                )
+            )
+
+            Logger.smartWallet.info(LogEvents.evmSignTypedDataPrepared, attributes: [
+                "signatureId": response.id
+            ])
+
+            // Poll for completed signature
+            let completedSignature = try await pollSignatureWhilePending(
+                signatureId: response.id,
                 chainType: chain.chainType
             )
-        )
 
-        // Poll for completed signature
-        let completedSignature = try await pollSignatureWhilePending(
-            signatureId: response.id,
-            chainType: chain.chainType
-        )
+            // Extract the signature from the completed response
+            guard let signature = extractSignature(from: completedSignature, for: signer) else {
+                throw SignatureError.approvalFailed
+            }
 
-        // Extract the signature from the completed response
-        guard let signature = extractSignature(from: completedSignature, for: signer) else {
-            throw .approvalFailed
+            Logger.smartWallet.info(LogEvents.evmSignTypedDataSuccess, attributes: [
+                "signatureId": response.id
+            ])
+
+            return signature
+        } catch {
+            Logger.smartWallet.error(LogEvents.evmSignTypedDataError, attributes: [
+                "error": "\(error)"
+            ])
+            throw error as? SignatureError ?? .unknown
         }
-
-        return signature
     }
 
     private func createAndApproveSignature(request: CreateSignatureRequest) async throws(SignatureError) -> any SignatureApiModel {

@@ -13,6 +13,8 @@ public final class DefaultCrossmintWallets: CrossmintWallets, Sendable {
     ) {
         self.smartWalletService = service
         self.secureWalletStorage = secureWalletStorage
+
+        Logger.smartWallet.info(LogEvents.sdkInitialized)
     }
 
     public func getOrCreateWallet(
@@ -22,6 +24,9 @@ public final class DefaultCrossmintWallets: CrossmintWallets, Sendable {
     ) async throws(WalletError) -> Wallet {
         guard isValid(chain: chain) else {
             let errorMessage = "The chain \(chain.name) is not supported for the current environment"
+            Logger.smartWallet.error(LogEvents.walletFactoryGetOrCreateWalletError, attributes: [
+                "error": errorMessage
+            ])
             throw WalletError.walletCreationFailed(errorMessage)
         }
 

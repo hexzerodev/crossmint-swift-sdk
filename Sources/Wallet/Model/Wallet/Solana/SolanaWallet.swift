@@ -1,5 +1,6 @@
 import CrossmintCommonTypes
 import Foundation
+import Logger
 
 public final class SolanaWallet: Wallet, WalletOnChain, @unchecked Sendable {
     public typealias SpecificChain = SolanaChain
@@ -55,9 +56,24 @@ public final class SolanaWallet: Wallet, WalletOnChain, @unchecked Sendable {
     public func sendTransaction(
         transaction: String
     ) async throws(TransactionError) -> TransactionSummary {
-        guard let completedTransaction = try await super.sendTransaction(
+        Logger.smartWallet.info(LogEvents.solanaSendTransactionStart)
+
+        guard let tx = try await super.sendTransaction(
             CreateSolanaTransactionRequest(transaction: transaction)
-        )?.toCompleted() else { throw .transactionGeneric("Unknown error") }
+        ) else { throw .transactionGeneric("Unknown error") }
+
+        Logger.smartWallet.info(LogEvents.solanaSendTransactionPrepared, attributes: [
+            "transactionId": tx.id
+        ])
+
+        guard let completedTransaction = tx.toCompleted() else {
+            throw .transactionGeneric("Unknown error")
+        }
+
+        Logger.smartWallet.info(LogEvents.solanaSendTransactionSuccess, attributes: [
+            "transactionId": completedTransaction.id,
+            "hash": completedTransaction.onChain.txId
+        ])
 
         return completedTransaction.summary
     }

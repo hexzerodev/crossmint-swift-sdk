@@ -186,4 +186,156 @@ public enum LogEvents {
 
     /// Staging fund failed
     public static let walletStagingFundError = "wallet.stagingFund.error"
+
+    // MARK: - API Level Events
+
+    /// API: Creating wallet
+    public static let apiCreateWalletStart = "wallets.api.createWallet"
+
+    /// API: Wallet creation failed
+    public static let apiCreateWalletError = "wallets.api.createWallet.error"
+
+    /// API: Wallet created successfully
+    public static let apiCreateWalletSuccess = "wallets.api.createWallet.success"
+
+    /// API: Getting wallet
+    public static let apiGetWalletStart = "wallets.api.getWallet"
+
+    /// API: Get wallet failed
+    public static let apiGetWalletError = "wallets.api.getWallet.error"
+
+    /// API: Wallet retrieved successfully
+    public static let apiGetWalletSuccess = "wallets.api.getWallet.success"
+
+    /// API: Sending transaction
+    public static let apiSendStart = "wallets.api.send"
+
+    /// API: Send failed
+    public static let apiSendError = "wallets.api.send.error"
+
+    /// API: Send successful
+    public static let apiSendSuccess = "wallets.api.send.success"
+
+    // MARK: - SDK Initialization
+
+    /// SDK initialized
+    public static let sdkInitialized = "wallets.sdk.initialized"
+
+    // MARK: - EVM Wallet Events
+
+    /// EVM: Starting send transaction
+    public static let evmSendTransactionStart = "evmWallet.sendTransaction.start"
+
+    /// EVM: Transaction prepared
+    public static let evmSendTransactionPrepared = "evmWallet.sendTransaction.prepared"
+
+    /// EVM: Transaction sent successfully
+    public static let evmSendTransactionSuccess = "evmWallet.sendTransaction.success"
+
+    /// EVM: Starting sign message
+    public static let evmSignMessageStart = "evmWallet.signMessage.start"
+
+    /// EVM: Sign message failed
+    public static let evmSignMessageError = "evmWallet.signMessage.error"
+
+    /// EVM: Message signature prepared
+    public static let evmSignMessagePrepared = "evmWallet.signMessage.prepared"
+
+    /// EVM: Message signed successfully
+    public static let evmSignMessageSuccess = "evmWallet.signMessage.success"
+
+    /// EVM: Starting sign typed data
+    public static let evmSignTypedDataStart = "evmWallet.signTypedData.start"
+
+    /// EVM: Sign typed data failed (invalid data)
+    public static let evmSignTypedDataErrorInvalidData = "evmWallet.signTypedData.error (invalid data)"
+
+    /// EVM: Sign typed data failed (invalid domain)
+    public static let evmSignTypedDataErrorInvalidDomain = "evmWallet.signTypedData.error (invalid domain)"
+
+    /// EVM: Sign typed data failed
+    public static let evmSignTypedDataError = "evmWallet.signTypedData.error"
+
+    /// EVM: Typed data signature prepared
+    public static let evmSignTypedDataPrepared = "evmWallet.signTypedData.prepared"
+
+    /// EVM: Typed data signed successfully
+    public static let evmSignTypedDataSuccess = "evmWallet.signTypedData.success"
+
+    // MARK: - Solana Wallet Events
+
+    /// Solana: Starting send transaction
+    public static let solanaSendTransactionStart = "solanaWallet.sendTransaction.start"
+
+    /// Solana: Transaction prepared
+    public static let solanaSendTransactionPrepared = "solanaWallet.sendTransaction.prepared"
+
+    /// Solana: Transaction sent successfully
+    public static let solanaSendTransactionSuccess = "solanaWallet.sendTransaction.success"
+
+    // MARK: - Wallet Approve Events
+
+    /// Starting transaction/signature approval
+    public static let walletApproveStart = "wallet.approve.start"
+
+    /// Transaction approval successful
+    public static let walletApproveSuccessTransaction = "wallet.approve.success (transaction)"
+
+    /// Signature approval successful
+    public static let walletApproveSuccessSignature = "wallet.approve.success (signature)"
+
+    /// Approval failed
+    public static let walletApproveError = "wallet.approve.error"
+
+    // MARK: - Delegated Signer Events
+
+    /// Starting add delegated signer
+    public static let walletAddDelegatedSignerStart = "wallet.addDelegatedSigner.start"
+
+    /// Add delegated signer failed
+    public static let walletAddDelegatedSignerError = "wallet.addDelegatedSigner.error"
+
+    /// Add delegated signer failed (no transaction)
+    public static let walletAddDelegatedSignerErrorNoTransaction = "wallet.addDelegatedSigner.error (no transaction)"
+
+    /// Delegated signer transaction prepared
+    public static let walletAddDelegatedSignerPrepared = "wallet.addDelegatedSigner.prepared"
+
+    /// Delegated signer added (transaction)
+    public static let walletAddDelegatedSignerSuccessTransaction = "wallet.addDelegatedSigner.success (transaction)"
+
+    /// Delegated signer signature failed
+    public static let walletAddDelegatedSignerErrorSignature = "wallet.addDelegatedSigner.error (signature)"
+
+    /// Delegated signer signature prepared
+    public static let walletAddDelegatedSignerPreparedSignature = "wallet.addDelegatedSigner.prepared (signature)"
+
+    /// Delegated signer signature pending
+    public static let walletAddDelegatedSignerSuccessSignaturePending = "wallet.addDelegatedSigner.success (signature pending)"
+
+    /// Delegated signer signature complete
+    public static let walletAddDelegatedSignerSuccessSignatureComplete = "wallet.addDelegatedSigner.success (signature complete)"
+
+    /// Delegated signer added successfully
+    public static let walletAddDelegatedSignerSuccess = "wallet.addDelegatedSigner.success"
+
+    /// Getting delegated signers
+    public static let walletDelegatedSignersStart = "wallet.delegatedSigners.start"
+
+    /// Failed to get delegated signers
+    public static let walletDelegatedSignersError = "wallet.delegatedSigners.error"
+
+    /// No delegated signers found
+    public static let walletDelegatedSignersErrorNoSigners = "wallet.delegatedSigners.error (no signers)"
+
+    /// Delegated signers retrieved
+    public static let walletDelegatedSignersSuccess = "wallet.delegatedSigners.success"
+
+    // MARK: - WalletFactory Error Events
+
+    /// Invalid chain error in getOrCreateWallet
+    public static let walletFactoryGetOrCreateWalletError = "walletFactory.getOrCreateWallet.error"
+
+    /// Invalid chain error in getWallet
+    public static let walletFactoryGetWalletError = "walletFactory.getWallet.error"
 }

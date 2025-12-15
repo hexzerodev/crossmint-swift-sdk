@@ -4,7 +4,7 @@ import Utils
 public struct Logger: Sendable {
 
     private let providers: [LoggerProvider]
-    public nonisolated(unsafe) static var level: OSLogType = .fault
+    public nonisolated(unsafe) static var level: LogLevel = .error
 
     private let osLogger: OSLog
     private let subsystem: String
@@ -24,28 +24,28 @@ public struct Logger: Sendable {
     }
 
     public func debug(_ message: String, attributes: [String: Encodable]? = nil) {
-        guard Logger.level == .debug else { return }
+        guard Logger.level.rawValue <= LogLevel.debug.rawValue else { return }
         for provider in providers {
             provider.debug(message, attributes: attributes)
         }
     }
 
     public func error(_ message: String, attributes: [String: Encodable]? = nil) {
-        guard Logger.level != .fault else { return }
+        guard Logger.level.rawValue <= LogLevel.error.rawValue else { return }
         for provider in providers {
             provider.error(message, attributes: attributes)
         }
     }
 
     public func info(_ message: String, attributes: [String: Encodable]? = nil) {
-        guard [.debug, .info].contains(Logger.level) else { return }
+        guard Logger.level.rawValue <= LogLevel.info.rawValue else { return }
         for provider in providers {
             provider.info(message, attributes: attributes)
         }
     }
 
     public func warn(_ message: String, attributes: [String: Encodable]? = nil) {
-        guard [.debug, .info, .default].contains(Logger.level) else { return }
+        guard Logger.level.rawValue <= LogLevel.warn.rawValue else { return }
         for provider in providers {
             provider.warn(message, attributes: attributes)
         }
