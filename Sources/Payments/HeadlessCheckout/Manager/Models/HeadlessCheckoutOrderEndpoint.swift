@@ -1,5 +1,6 @@
 import CrossmintService
 import Http
+import Utils
 
 public enum HeadlessCheckoutOrderEndpoint {
     case getOrder(orderId: String, headers: [String: String] = [:])
@@ -23,7 +24,7 @@ public enum HeadlessCheckoutOrderEndpoint {
             )
         case .createOrder(let input, let headers):
             let orderSourceHeader = OrderSourceHeader(
-                sdkMetadata: OrderSourceSDKMetadata(version: "1.0.0")  // TODO: get the version from the SDK
+                sdkMetadata: OrderSourceSDKMetadata(version: SDKVersion.version)
             )
             var headersWithOrderSource = headers
             headersWithOrderSource["x-order-source"] = orderSourceHeader.json()

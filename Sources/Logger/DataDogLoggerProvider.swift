@@ -8,6 +8,7 @@
 import Foundation
 import DatadogCore
 import DatadogLogs
+import Utils
 
 final class DataDogLoggerProvider: LoggerProvider {
     private nonisolated(unsafe) static var isDataDogInitialized: Bool = false
@@ -49,7 +50,8 @@ final class DataDogLoggerProvider: LoggerProvider {
     private func buildAttributes(_ attributes: [String: any Encodable]?) -> [String: Encodable] {
         var loggerAttributes: [String: Encodable] = [
             "service": service,
-            "platform": "ios"
+            "platform": "ios",
+            "sdk_version": SDKVersion.version
         ]
 
         if let attributes {

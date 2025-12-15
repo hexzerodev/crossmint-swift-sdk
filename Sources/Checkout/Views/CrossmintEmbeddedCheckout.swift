@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Utils
 
 public struct CrossmintEmbeddedCheckout: View {
     private let orderId: String?
@@ -76,8 +77,7 @@ public struct CrossmintEmbeddedCheckout: View {
 
         var queryItems: [URLQueryItem] = []
 
-        // TODO: Fetch SDK version dynamically
-        let sdkMetadata = ["name": "@crossmint/client-sdk-swift", "version": "1.0.0"]
+        let sdkMetadata = ["name": "@crossmint/client-sdk-swift", "version": SDKVersion.version]
         queryItems.append(URLQueryItem(name: "sdkMetadata", value: try sdkMetadata.toJSON()))
 
         if let orderId = orderId {

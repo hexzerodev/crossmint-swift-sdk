@@ -1,0 +1,92 @@
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version number (e.g., 0.0.8)'
+        required: true
+        type: string
+
+env:
+  DEVELOPER_DIR: /Applications/Xcode_16.4.app/Contents/Developer
+
+jobs:
+  release:
+    name: Create Release
+    runs-on: macos-15
+    permissions:
+      contents: write
+
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Setup Xcode
+      uses: maxim-lobanov/setup-xcode@v1
+      with:
+        xcode-version: '16.4'
+
+    - name: Validate version format
+      run: |
+        if ! echo "${{ inputs.version }}" | grep -qE '^[0-9]+\.[0-9]+\.[0-9]+(-[a-zA-Z0-9]+)?$'; then
+          echo "Error: Version must follow semantic versioning (e.g., 0.0.8 or 1.0.0-beta)"
+          exit 1
+        fi
+
+    - name: Check if tag already exists
+      run: |
+        if git rev-parse "${{ inputs.version }}" >/dev/null 2>&1; then
+          echo "Error: Tag ${{ inputs.version }} already exists"
+          exit 1
+        fi
+
+    - name: Cache SPM packages
+      uses: actions/cache@v4
+      with:
+        path: .build
+        key: ${{ runner.os }}-spm-${{ hashFiles('Package.resolved') }}
+        restore-keys: |
+          ${{ runner.os }}-spm-
+
+    - name: Run tests
+      run: |
+        make ci-test
+
+    - name: Run SwiftLint
+      run: make lint
+
+    - name: Update SDK version in code
+      run: |
+        VERSION="${{ inputs.version }}"
+        sed -i '' "s/public static let version = \".*\"/public static let version = \"$VERSION\"/" Sources/Utils/SDKVersion.swift
+
+        # Verify the change was made
+        if ! grep -q "public static let version = \"$VERSION\"" Sources/Utils/SDKVersion.swift; then
+          echo "Error: Failed to update version in SDKVersion.swift"
+          exit 1
+        fi
+
+        echo "✅ Updated SDKVersion.swift to version $VERSION"
+        cat Sources/Utils/SDKVersion.swift
+
+    - name: Configure Git
+      run: |
+        git config user.name "github-actions[bot]"
+        git config user.email "github-actions[bot]@users.noreply.github.com"
+
+    - name: Commit version bump and create tag
+      run: |
+        git add Sources/Utils/SDKVersion.swift
+        git commit -m "chore: bump version to ${{ inputs.version }}"
+        git tag "${{ inputs.version }}"
+        git push origin main --tags
+
+    - name: Create GitHub Release
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        gh release create "${{ inputs.version }}" \
+          --title "Release ${{ inputs.version }}" \
+          --generate-notes
