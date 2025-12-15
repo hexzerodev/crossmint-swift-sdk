@@ -16,6 +16,8 @@ struct TransferDashboardView: View {
     @State private var availableTokens: [SolanaSupportedToken] = []
     @State private var showTokenSelectionMenu: Bool = false
     @State private var isSendingTransaction: Bool = false
+    @State private var currentIdempotencyKey: String = UUID().uuidString
+    @State private var idempotencyKeyTask: Task<Void, Never>?
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
@@ -112,6 +114,37 @@ struct TransferDashboardView: View {
                 selectedToken = availableTokens.first
             }
         })
+        .onAppear {
+            idempotencyKeyTask?.cancel()
+            startIdempotencyKeyRotation()
+        }
+        .onDisappear {
+            idempotencyKeyTask?.cancel()
+        }
+        .onChange(of: amount) { _, _ in
+            resetIdempotencyKey()
+        }
+        .onChange(of: recipientWallet) { _, _ in
+            resetIdempotencyKey()
+        }
+        .onChange(of: selectedToken) { _, _ in
+            resetIdempotencyKey()
+        }
+    }
+
+    private func resetIdempotencyKey() {
+        currentIdempotencyKey = UUID().uuidString
+    }
+
+    private func startIdempotencyKeyRotation() {
+        idempotencyKeyTask = Task {
+            while !Task.isCancelled {
+                try? await Task.sleep(nanoseconds: 30_000_000_000)
+                await MainActor.run {
+                    currentIdempotencyKey = UUID().uuidString
+                }
+            }
+        }
     }
 
     private func triggerTransaction() async {
@@ -137,7 +170,8 @@ struct TransferDashboardView: View {
             let summary = try await wallet.send(
                 recipientWallet,
                 "solana:\(selectedToken)",
-                amount
+                amount,
+                idempotencyKey: currentIdempotencyKey
             )
 
             await MainActor.run {

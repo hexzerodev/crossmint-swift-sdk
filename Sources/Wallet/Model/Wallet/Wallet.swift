@@ -169,10 +169,18 @@ open class Wallet: @unchecked Sendable {
         return transaction
     }
 
+    /// Sends tokens to a recipient.
+    /// - Parameters:
+    ///   - walletLocator: The recipient wallet address
+    ///   - tokenLocator: Token identifier in format "{chain}:{token}" (e.g., "base-sepolia:eth", "solana:usdc")
+    ///   - amount: The amount to send as a decimal number
+    ///   - idempotencyKey: Optional unique key to prevent duplicate transaction creation. If not provided, a random UUID will be generated.
+    /// - Returns: A TransactionSummary containing the transaction details
     public func send(
         _ walletLocator: String,
         _ tokenLocator: String,
-        _ amount: Double
+        _ amount: Double,
+        idempotencyKey: String? = nil
     ) async throws(TransactionError) -> TransactionSummary {
         Logger.smartWallet.debug(LogEvents.walletSendStart, attributes: [
             "recipient": walletLocator,
@@ -183,7 +191,8 @@ open class Wallet: @unchecked Sendable {
         guard let transaction = try await transferTokenAndPollWhilePending(
             tokenLocator: tokenLocator,
             recipient: walletLocator,
-            amount: String(amount)
+            amount: String(amount),
+            idempotencyKey: idempotencyKey
         )?.toCompleted() else {
             Logger.smartWallet.error(LogEvents.walletSendError, attributes: [
                 "error": "Unknown error"
@@ -252,14 +261,16 @@ Transaction ID: \(createdTransaction?.id ?? "unknown")
     internal func transferTokenAndPollWhilePending(
         tokenLocator: String,
         recipient: String,
-        amount: String
+        amount: String,
+        idempotencyKey: String? = nil
     ) async throws(TransactionError) -> Transaction? {
         onTransactionStart?()
         let createdTransaction = try await smartWalletService.transferToken(
             chainType: chain.chainType.rawValue,
             tokenLocator: tokenLocator,
             recipient: recipient,
-            amount: amount
+            amount: amount,
+            idempotencyKey: idempotencyKey
         ).toDomain(withService: smartWalletService)
 
         let signedTransaction = try await signTransactionIfRequired(createdTransaction)
