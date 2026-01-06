@@ -39,7 +39,6 @@ let package = Package(
         .package(url: "https://github.com/attaswift/BigInt", from: "5.4.0"),
         .package(url: "https://github.com/ekscrypto/SwiftEmailValidator", exact: "1.0.4"),
         .package(url: "https://github.com/valpackett/SwiftCBOR", exact: "0.5.0"),
-        .package(url: "https://github.com/DataDog/dd-sdk-ios.git", from: "2.0.0"),
         // Plugins
         // If the Swiftlint version is updated, update the binary in the Makefile.
         .package(url: "https://github.com/SimplyDanny/SwiftLintPlugins", exact: "0.59.1")
@@ -78,9 +77,7 @@ let package = Package(
         .target(
             name: "Logger",
             dependencies: [
-                "Utils",
-                .product(name: "DatadogCore", package: "dd-sdk-ios"),
-                .product(name: "DatadogLogs", package: "dd-sdk-ios")
+                "Utils"
             ],
             plugins: basePlugins
         ),

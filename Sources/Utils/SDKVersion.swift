@@ -10,5 +10,5 @@ import Foundation
 /// This version is automatically updated by the release workflow
 public enum SDKVersion {
     /// The current version of the Crossmint Swift SDK
-    public static let version = "0.0.7"
+    public static let version = "0.0.8"
 }

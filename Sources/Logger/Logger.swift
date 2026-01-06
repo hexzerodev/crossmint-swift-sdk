@@ -50,4 +50,10 @@ public struct Logger: Sendable {
             provider.warn(message, attributes: attributes)
         }
     }
+
+    public func flush() async {
+        for provider in providers {
+            await provider.flush()
+        }
+    }
 }
