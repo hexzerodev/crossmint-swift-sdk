@@ -46,7 +46,7 @@ final public class CrossmintSDK: ObservableObject {
 
     let crossmintTEE: CrossmintTEE
 
-    public var isOTPRequred: Published<Bool>.Publisher {
+    public var isOTPRequired: Published<Bool>.Publisher {
         crossmintTEE.$isOTPRequired
     }
     public func submit(otp: String) {
