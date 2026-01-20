@@ -127,7 +127,7 @@ struct SplashScreen: View {
         .task {
             await authenticate()
         }
-        .onReceive(CrossmintSDK.shared.isOTPRequred) {
+        .onReceive(CrossmintSDK.shared.isOTPRequired) {
             showOTPView = $0
         }
     }
