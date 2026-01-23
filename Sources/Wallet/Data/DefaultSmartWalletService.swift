@@ -371,6 +371,52 @@ public final class DefaultSmartWalletService: SmartWalletService {
         return response
     }
 
+    public func listTransfers(
+        _ params: ListTransfersQueryParams
+    ) async throws(WalletError) -> TransferListResult {
+        Logger.smartWallet.info(LogEvents.apiListTransfersStart, attributes: [
+            "walletLocator": params.walletLocator.value,
+            "chain": params.chain.name
+        ])
+
+        var queryItems: [URLQueryItem] = [
+            .init(name: "chain", value: params.chain.name),
+            .init(name: "status", value: "successful")
+        ]
+        if !params.tokens.isEmpty {
+            queryItems.append(.init(name: "tokens", value: params.tokens.map(\.name).joined(separator: ",")))
+        }
+
+        let chainType = params.chain.chainType.rawValue
+
+        do {
+            let response: TransferListApiModel = try await crossmintService.executeRequest(
+                Endpoint(
+                    path: "/unstable/wallets/me:\(chainType)/transfers",
+                    method: .get,
+                    headers: await authHeaders,
+                    queryItems: queryItems
+                ),
+                errorType: WalletError.self
+            )
+
+            let result = TransferListResult(
+                transfers: response.data.compactMap { Transfer.map($0) }
+            )
+
+            Logger.smartWallet.info(LogEvents.apiListTransfersSuccess, attributes: [
+                "count": "\(result.transfers.count)"
+            ])
+
+            return result
+        } catch {
+            Logger.smartWallet.warn(LogEvents.apiListTransfersError, attributes: [
+                "error": "\(error)"
+            ])
+            throw error
+        }
+    }
+
     public var authHeaders: [String: String] {
         get async {
             guard let jwt = await authManager.jwt else {

@@ -24,7 +24,7 @@ struct DashboardView: View {
     }
 
     enum Tab {
-        case balance, transfer, nft
+        case balance, transfer, history, nft
     }
 
     var body: some View {
@@ -55,6 +55,12 @@ struct DashboardView: View {
                     TabButton(title: "Transfer", isSelected: selectedTab == .transfer) {
                         withAnimation(AnimationConstants.easeInOut(duration: AnimationConstants.shortDuration)) {
                             selectedTab = .transfer
+                        }
+                    }
+
+                    TabButton(title: "History", isSelected: selectedTab == .history) {
+                        withAnimation(AnimationConstants.easeInOut(duration: AnimationConstants.shortDuration)) {
+                            selectedTab = .history
                         }
                     }
 
@@ -99,6 +105,8 @@ struct DashboardView: View {
             }
             TransferDashboardView(wallet: wallet, balances: $balance)
                 .opacity(selectedTab == .transfer ? 1.0 : 0.0)
+            TransferHistoryView(wallet: wallet)
+                .opacity(selectedTab == .history ? 1.0 : 0.0)
             NFTDashboardView(wallet: wallet)
                 .opacity(selectedTab == .nft ? 1.0 : 0.0)
         }

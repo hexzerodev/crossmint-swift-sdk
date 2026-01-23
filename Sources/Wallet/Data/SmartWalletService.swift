@@ -58,4 +58,14 @@ public protocol SmartWalletService: AuthenticatedService, Sendable {
         _ signatureId: String,
         chainType: ChainType
     ) async throws(SignatureError) -> any SignatureApiModel
+
+    /// Fetches the transfer history for a wallet.
+    ///
+    /// - Note: This endpoint uses the `/unstable/` API prefix, meaning the API may change
+    ///   without notice. Use with caution in production environments.
+    /// - Parameter params: Query parameters including wallet locator, chain, tokens, and pagination options.
+    /// - Returns: A `TransferListResult` containing the list of transfers and pagination cursors.
+    func listTransfers(
+        _ params: ListTransfersQueryParams
+    ) async throws(WalletError) -> TransferListResult
 }

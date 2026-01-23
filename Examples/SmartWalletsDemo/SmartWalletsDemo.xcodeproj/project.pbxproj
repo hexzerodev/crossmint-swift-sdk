@@ -21,6 +21,7 @@
 		EB9BDDE22DC4CFBF003999C7 /* BalanceDashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB9BDDE12DC4CFBF003999C7 /* BalanceDashboardView.swift */; };
 		EB9BDDE42DC4CFCF003999C7 /* TransferDashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB9BDDE32DC4CFCF003999C7 /* TransferDashboardView.swift */; };
 		EB9BDDE62DC4CFE2003999C7 /* NFTDashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB9BDDE52DC4CFE2003999C7 /* NFTDashboardView.swift */; };
+		EBHISTORY12F000000000001 /* TransferHistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBHISTORY02F000000000001 /* TransferHistoryView.swift */; };
 		EB9BDDEB2DC4D219003999C7 /* GetTestTokenButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB9BDDE92DC4D219003999C7 /* GetTestTokenButton.swift */; };
 		EB9BDDEC2DC4D219003999C7 /* WalletBalanceEntryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB9BDDEA2DC4D219003999C7 /* WalletBalanceEntryView.swift */; };
 		EB9BDDF02DC4E3F1003999C7 /* MiddleEllipsisText.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB9BDDEF2DC4E3F1003999C7 /* MiddleEllipsisText.swift */; };
@@ -50,6 +51,7 @@
 		EB9BDDE12DC4CFBF003999C7 /* BalanceDashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BalanceDashboardView.swift; sourceTree = "<group>"; };
 		EB9BDDE32DC4CFCF003999C7 /* TransferDashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransferDashboardView.swift; sourceTree = "<group>"; };
 		EB9BDDE52DC4CFE2003999C7 /* NFTDashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NFTDashboardView.swift; sourceTree = "<group>"; };
+		EBHISTORY02F000000000001 /* TransferHistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransferHistoryView.swift; sourceTree = "<group>"; };
 		EB9BDDE92DC4D219003999C7 /* GetTestTokenButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetTestTokenButton.swift; sourceTree = "<group>"; };
 		EB9BDDEA2DC4D219003999C7 /* WalletBalanceEntryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletBalanceEntryView.swift; sourceTree = "<group>"; };
 		EB9BDDEF2DC4E3F1003999C7 /* MiddleEllipsisText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiddleEllipsisText.swift; sourceTree = "<group>"; };
@@ -144,6 +146,7 @@
 			children = (
 				EBB46CD72DC8F8E00026AA88 /* AlertViewModel.swift */,
 				EB9BDDE52DC4CFE2003999C7 /* NFTDashboardView.swift */,
+				EBHISTORY02F000000000001 /* TransferHistoryView.swift */,
 				EB9BDDE32DC4CFCF003999C7 /* TransferDashboardView.swift */,
 				EB9BDDE12DC4CFBF003999C7 /* BalanceDashboardView.swift */,
 				AC0102062DD800000000001 /* DashboardView.swift */,
@@ -248,6 +251,7 @@
 				EB5D83162E45FA36002F8EF1 /* OTPValidatorView.swift in Sources */,
 				EBEC0BD52DC396EA000B59F1 /* SecondaryButton.swift in Sources */,
 				EB9BDDE62DC4CFE2003999C7 /* NFTDashboardView.swift in Sources */,
+				EBHISTORY12F000000000001 /* TransferHistoryView.swift in Sources */,
 				AC0101072DC600000000004 /* SmartWalletsDemoApp.swift in Sources */,
 				EBEC0BCE2DC37AE4000B59F1 /* CrossmintPoweredView.swift in Sources */,
 				EB9BDDE42DC4CFCF003999C7 /* TransferDashboardView.swift in Sources */,

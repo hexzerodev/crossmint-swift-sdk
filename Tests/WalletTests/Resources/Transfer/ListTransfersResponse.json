@@ -1,0 +1,96 @@
+{
+  "data": [
+    {
+      "type": "wallets.transfer.out",
+      "sender": {
+        "address": "0x1234567890123456789012345678901234567890",
+        "chain": "base-sepolia",
+        "locator": "base-sepolia:0x1234567890123456789012345678901234567890",
+        "owner": "email:user@example.com"
+      },
+      "recipient": {
+        "address": "0x0987654321098765432109876543210987654321",
+        "chain": "base-sepolia",
+        "locator": "base-sepolia:0x0987654321098765432109876543210987654321",
+        "owner": null
+      },
+      "token": {
+        "type": "ft",
+        "chain": "base-sepolia",
+        "locator": "base-sepolia:usdc",
+        "amount": "10.5",
+        "symbol": "USDC",
+        "decimals": 6
+      },
+      "status": "successful",
+      "onChain": {
+        "txId": "0xabcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890",
+        "explorerLink": "https://sepolia.basescan.org/tx/0xabcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890"
+      },
+      "completedAt": "2024-01-15T10:30:00.000Z",
+      "error": null
+    },
+    {
+      "type": "wallets.transfer.in",
+      "sender": {
+        "address": "0x0987654321098765432109876543210987654321",
+        "chain": "base-sepolia",
+        "locator": "base-sepolia:0x0987654321098765432109876543210987654321",
+        "owner": null
+      },
+      "recipient": {
+        "address": "0x1234567890123456789012345678901234567890",
+        "chain": "base-sepolia",
+        "locator": "base-sepolia:0x1234567890123456789012345678901234567890",
+        "owner": "email:user@example.com"
+      },
+      "token": {
+        "type": "ft",
+        "chain": "base-sepolia",
+        "locator": "base-sepolia:eth",
+        "amount": "0.05",
+        "symbol": "ETH",
+        "decimals": 18
+      },
+      "status": "successful",
+      "onChain": {
+        "txId": "0x1111111111111111111111111111111111111111111111111111111111111111",
+        "explorerLink": "https://sepolia.basescan.org/tx/0x1111111111111111111111111111111111111111111111111111111111111111"
+      },
+      "completedAt": "2024-01-14T08:15:30.500Z",
+      "error": null
+    },
+    {
+      "type": "wallets.transfer.out",
+      "sender": {
+        "address": "0x1234567890123456789012345678901234567890",
+        "chain": "base-sepolia",
+        "locator": "base-sepolia:0x1234567890123456789012345678901234567890",
+        "owner": "email:user@example.com"
+      },
+      "recipient": {
+        "address": "0x2222222222222222222222222222222222222222",
+        "chain": "base-sepolia",
+        "locator": "base-sepolia:0x2222222222222222222222222222222222222222",
+        "owner": null
+      },
+      "token": {
+        "type": "ft",
+        "chain": "base-sepolia",
+        "locator": "base-sepolia:usdc",
+        "amount": "25.00",
+        "symbol": "USDC",
+        "decimals": 6
+      },
+      "status": "successful",
+      "onChain": {
+        "txId": "0x3333333333333333333333333333333333333333333333333333333333333333",
+        "explorerLink": "https://sepolia.basescan.org/tx/0x3333333333333333333333333333333333333333333333333333333333333333"
+      },
+      "completedAt": "2024-01-13T14:00:00Z",
+      "error": null
+    }
+  ],
+  "nextCursor": "eyJsYXN0SWQiOiIxMjM0NTY3ODkwIn0=",
+  "previousCursor": null
+}

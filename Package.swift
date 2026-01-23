@@ -194,7 +194,8 @@ let package = Package(
                 .process("Resources/WalletEVMApiKey.json"),
                 .process("Resources/WalletEVMEmail.json"),
                 .process("Resources/WalletSolanaEmail.json"),
-                .process("Resources/WalletEVMPhone.json")
+                .process("Resources/WalletEVMPhone.json"),
+                .process("Resources/Transfer/ListTransfersResponse.json")
             ],
             plugins: basePlugins
         ),

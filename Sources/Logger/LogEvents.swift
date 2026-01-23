@@ -216,6 +216,15 @@ public enum LogEvents {
     /// API: Send successful
     public static let apiSendSuccess = "wallets.api.send.success"
 
+    /// API: Listing transfers
+    public static let apiListTransfersStart = "wallets.api.listTransfers"
+
+    /// API: List transfers failed
+    public static let apiListTransfersError = "wallets.api.listTransfers.error"
+
+    /// API: List transfers successful
+    public static let apiListTransfersSuccess = "wallets.api.listTransfers.success"
+
     // MARK: - SDK Initialization
 
     /// SDK initialized
