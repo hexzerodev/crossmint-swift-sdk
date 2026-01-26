@@ -115,16 +115,17 @@ extension Transfer {
             return nil
         }
 
+        guard let amount = Decimal(string: apiModel.token.amount) else {
+            return nil
+        }
+
         return Transfer(
             type: type,
             fromAddress: apiModel.sender.address,
             toAddress: apiModel.recipient.address,
             transactionHash: apiModel.onChain?.txId ?? "",
             tokenSymbol: apiModel.token.symbol,
-            guard let amount = Decimal(string: apiModel.token.amount) else { return nil }
-            return Transfer(
-                ...
-                amount: amount,
+            amount: amount,
             rawAmount: apiModel.token.amount,
             timestamp: timestamp,
             mintHash: nil
