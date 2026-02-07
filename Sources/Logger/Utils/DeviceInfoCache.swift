@@ -25,35 +25,43 @@ struct DeviceInfoCache: @unchecked Sendable {
     let cellularTechnology: String?
 
     #if canImport(UIKit)
-    private nonisolated(unsafe) static func getDeviceModel() -> String {
+    private static func getDeviceModel() -> String {
         if Thread.isMainThread {
-            return UIDevice.current.model
+            return MainActor.assumeIsolated { UIDevice.current.model }
         } else {
-            return DispatchQueue.main.sync { UIDevice.current.model }
+            return DispatchQueue.main.sync {
+                MainActor.assumeIsolated { UIDevice.current.model }
+            }
         }
     }
 
-    private nonisolated(unsafe) static func getDeviceName() -> String {
+    private static func getDeviceName() -> String {
         if Thread.isMainThread {
-            return UIDevice.current.name
+            return MainActor.assumeIsolated { UIDevice.current.name }
         } else {
-            return DispatchQueue.main.sync { UIDevice.current.name }
+            return DispatchQueue.main.sync {
+                MainActor.assumeIsolated { UIDevice.current.name }
+            }
         }
     }
 
-    private nonisolated(unsafe) static func getOSName() -> String {
+    private static func getOSName() -> String {
         if Thread.isMainThread {
-            return UIDevice.current.systemName
+            return MainActor.assumeIsolated { UIDevice.current.systemName }
         } else {
-            return DispatchQueue.main.sync { UIDevice.current.systemName }
+            return DispatchQueue.main.sync {
+                MainActor.assumeIsolated { UIDevice.current.systemName }
+            }
         }
     }
 
-    private nonisolated(unsafe) static func getOSVersion() -> String {
+    private static func getOSVersion() -> String {
         if Thread.isMainThread {
-            return UIDevice.current.systemVersion
+            return MainActor.assumeIsolated { UIDevice.current.systemVersion }
         } else {
-            return DispatchQueue.main.sync { UIDevice.current.systemVersion }
+            return DispatchQueue.main.sync {
+                MainActor.assumeIsolated { UIDevice.current.systemVersion }
+            }
         }
     }
 
